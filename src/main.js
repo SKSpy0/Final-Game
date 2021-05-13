@@ -14,3 +14,5 @@ let game = new Phaser.Game(config);
 let cursors;
 let centerHeight = game.config.height/2;
 let centerWidth = game.config.width/2;
+
+//Render Texture and Alpha Mask taken from https://phaser.io/examples/v3/view/display/masks/spotlight
