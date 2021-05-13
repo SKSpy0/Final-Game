@@ -8,6 +8,8 @@ class Play extends Phaser.Scene{
         this.load.image('player', './assets/tempPlayer.png');
     }
     create() {
+        // Fade in transition
+        this.cameras.main.fadeIn(1000, 0, 0, 0);
         // Set cursors
         cursors = this.input.keyboard.createCursorKeys();
 
