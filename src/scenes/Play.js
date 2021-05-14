@@ -11,8 +11,14 @@ class Play extends Phaser.Scene{
     }
 
     create() {
+        // Fade in transition
+        this.cameras.main.fadeIn(1000, 0, 0, 0);
         // Set cursors
-        cursors = this.input.keyboard.createCursorKeys();
+        //cursors = this.input.keyboard.createCursorKeys();
+        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
         // Add background
         this.background = this.add.image(0, 0, 'background').setOrigin(0);

@@ -2,7 +2,7 @@ let config = {
     type: Phaser.AUTO,
     width: 540,
     height: 540,
-    scene: [Play],
+    scene: [Menu, Play],
     physics: {
         default: 'arcade',
         arcade: {
@@ -12,6 +12,7 @@ let config = {
 }
 let game = new Phaser.Game(config);
 let cursors;
+let keyW, keyA, keyS, keyD;
 let centerHeight = game.config.height/2;
 let centerWidth = game.config.width/2;
 
