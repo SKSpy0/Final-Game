@@ -46,7 +46,7 @@ class Play extends Phaser.Scene{
 
         // Will update and move a wave to player every 2 seconds
         this.waveCreateClock = this.time.addEvent({
-            delay: 3000,
+            delay: 2000,
             callback: this.moveWave,
             callbackScope: this,
             loop: true
@@ -55,8 +55,8 @@ class Play extends Phaser.Scene{
 
     //moves wave to new spot
     moveWave(){
-        this.wave.scaleX = 1;
-        this.wave.scaleY = 1;
+        this.wave.scaleX = 0.5;
+        this.wave.scaleY = 0.5;
         this.wave.x = this.player.x;
         this.wave.y = this.player.y;
         this.wave.alpha = 1;
@@ -71,7 +71,7 @@ class Play extends Phaser.Scene{
         if(this.newWave){
             this.wave.scaleX += 0.1;
             this.wave.scaleY += 0.1;
-            if(this.wave.scaleX >= 100){
+            if(this.wave.scaleX >= 25){
                 this.newWave = false;
             }
         } else {
