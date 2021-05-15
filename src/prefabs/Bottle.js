@@ -5,7 +5,7 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
         scene.physics.add.existing(this);
         
         // Adds player to scene
-        this.scene.add.existing(this);
+        scene.add.existing(this);
 
         // To check if bottle has been picked up
         this.pickedUpBottle = false;
