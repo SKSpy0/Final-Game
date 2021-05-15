@@ -75,8 +75,27 @@ class Play extends Phaser.Scene{
     levelOneSetup() {
         this.newBottle(430, 460);
         this.newBottle(200, 350);
-        this.wall1 = new Wall(this, -270,585, 'wall', 745, 225).setOrigin(0,0);
+        this.wall1 = new Wall(this, 0,427, 'wall', 373, 113).setOrigin(0,0);
+        this.wall2 = new Wall(this, 486,128, 'wall', 60, 412).setOrigin(0,0);
+        this.wall3 = new Wall(this, 378,340, 'wall', 110, 30).setOrigin(0,0);
+        this.wall4 = new Wall(this, 109,125, 'wall', 270, 170).setOrigin(0,0);
+        this.wall5 = new Wall(this, 0,0, 'wall', 14, 540).setOrigin(0,0);
+        this.wall6 = new Wall(this, 0,0, 'wall', 540, 10).setOrigin(0,0);
         this.physics.add.collider(this.player, this.wall1);
+        this.physics.add.collider(this.player, this.wall2);
+        this.physics.add.collider(this.player, this.wall3);
+        this.physics.add.collider(this.player, this.wall4);
+        this.physics.add.collider(this.player, this.wall5);
+        this.physics.add.collider(this.player, this.wall6);
+        this.nextLevel = new Wall(this, 500, 10, 'wall', 75,130).setOrigin(0,0);
+        var collider = this.physics.add.overlap(this.player, this.nextLevel, (player, bottle) => {
+                console.log("Level Complete");
+                this.physics.world.removeCollider(collider);
+                this.cameras.main.fadeOut(500, 0, 0, 0);
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                    this.scene.start('MenuScene');
+                })
+        });
     }
 
     // Creates New Bottles at set location (x, y)
