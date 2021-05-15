@@ -44,10 +44,13 @@ class Play extends Phaser.Scene{
         });
 
         // Level 1 layout
+        this.levelOneSetup();
+        /*
         this.newBottle(600,700);
         this.newBottle(300, 500);
         this.wall1 = new Wall(this, -270,585, 'wall', 745, 225).setOrigin(0,0);
         this.physics.add.collider(this.player, this.wall1);
+        */
 
 
         // Create lights (light1 for player footsteps, light2 for enemy footsteps, light3 for bottle)
@@ -72,6 +75,13 @@ class Play extends Phaser.Scene{
             callbackScope: this,
             loop: true,
         });
+    }
+
+    levelOneSetup() {
+        this.newBottle(600,700);
+        this.newBottle(300, 500);
+        this.wall1 = new Wall(this, -270,585, 'wall', 745, 225).setOrigin(0,0);
+        this.physics.add.collider(this.player, this.wall1);
     }
 
     newBottle(x, y) {
