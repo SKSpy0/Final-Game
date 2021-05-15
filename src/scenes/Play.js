@@ -56,19 +56,21 @@ class Play extends Phaser.Scene{
 
         // Create lights (light1 for player footsteps, light2 for enemy footsteps, light3 for bottle)
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
-        this.light1New = true;
+        this.light1New = false;
         this.light1Radius = 0;
 
         this.light2 = this.lights.addLight(200, 200, 0).setColor(0xffffff).setIntensity(3);
-        this.light2New = true;
+        this.light2New = false;
+        this.light1Radius = 0;
 
         // Will create a new footstep sound wave every 2 seconds
         this.waveSpawnTimer = this.time.addEvent({
-            delay: 1500,
+            delay: 1000,
             callback: this.createFootstep,
             callbackScope: this,
             loop: true,
         });
+        
     }
 
     levelOneSetup() {
@@ -107,6 +109,7 @@ class Play extends Phaser.Scene{
     newBottle(x, y) {
         // Add bottle
         var bottle = new Bottle(this, x, y, 'bottle', this.player).setOrigin(0.5);
+        bottle.setPipeline('Light2D');
         // Create collision check between player and bottle
         var collider = this.physics.add.overlap(this.player, bottle, (player, bottle) => {
             if (this.player.hasBottle() == false) {
@@ -125,13 +128,28 @@ class Play extends Phaser.Scene{
         this.light1Radius = 0;
         this.light1.setPosition(this.player.x, this.player.y);
         this.time.addEvent({
-            delay: 1000,
+            delay: 500,
             callback: () => {
                 this.light1New = false;
             }
         })
         // Play audio footstep
         console.log("footstep created");
+    }
+
+    // generates bottle sound wave
+    createBottleWave(bottle){
+        this.light2New = true;
+        this.light2Radius = 0;
+        this.light2.setPosition(bottle.x, bottle.y);
+        this.time.addEvent({
+            delay: 1200,
+            callback: () => {
+                this.light2New = false;
+            }
+        })
+
+        console.log("bottle wave created");
     }
 
     update() {
@@ -150,31 +168,43 @@ class Play extends Phaser.Scene{
                     delayCall.delay(this.time);
                 }
             }
+            // checks if bottle has landed
+            if(update.landedCheck()){
+                console.log('bottle landed');
+                if(!this.light2New){
+                    this.createBottleWave(update);
+                }
+            }
         }
 
         // Wave effect for Lights
         if(this.light1New){
-            this.light1Radius += 3.5
+            this.light1Radius += 1.8
             this.light1.setRadius(this.light1Radius);
         } else {
-            this.light1.setRadius(0);
+            this.light1Radius -= 1.8
+            this.light1.setRadius(this.light1Radius);
+            if(this.light1Radius <= 0){
+                this.light1.setRadius(0);
+            }
+        } 
+
+        // Wave effect for Lights
+        if(this.light2New){
+            this.light2Radius += 1.8
+            this.light2.setRadius(this.light2Radius);
+        } else {
+            this.light2Radius -= 1.8
+            this.light2.setRadius(this.light2Radius);
+            if(this.light2Radius <= 0){
+                this.light2.setRadius(0);
+            }
         }
+        
 
         /*if(this.player.isMoving()){
             console.log(this.player.x);
             console.log(this.player.y);
         }*/
-        
-        // Makes wave expand and stop after a certain scale is reached
-        /*if(this.newWave){
-            this.wave.scaleX += 0.2;
-            this.wave.scaleY += 0.2;
-            if(this.wave.scaleX >= 30){
-                this.newWave = false;
-                
-            }
-        } else {
-            this.wave.alpha = 0;
-        } */
     }
 }
