@@ -89,7 +89,7 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.player, this.wall4);
         this.physics.add.collider(this.player, this.wall5);
         this.physics.add.collider(this.player, this.wall6);
-        this.nextLevel = new Wall(this, 500, 10, 'wall', 75,130).setOrigin(0,0);
+        this.nextLevel = new Wall(this, 530, 10, 'wall', 25,117).setOrigin(0,0);
         var collider = this.physics.add.overlap(this.player, this.nextLevel, (player, bottle) => {
                 console.log("Level Complete");
                 this.physics.world.removeCollider(collider);
