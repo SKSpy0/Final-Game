@@ -6,7 +6,8 @@ class Play extends Phaser.Scene{
     preload() {
         // Loading temporary assets
         this.load.image('map1', './assets/Map01.png');
-        this.load.image('player', './assets/tempPlayer.png');
+        this.load.image('map2', './assets/Map02.png');
+        this.load.image('player', './assets/PlayerA.png');
         this.load.image('wave', './assets/wave2.png');
         this.load.image('bottle', './assets/bottle.png');
         this.load.image('wall', './assets/wallTest.png')
@@ -31,27 +32,28 @@ class Play extends Phaser.Scene{
         //this.lights.enable();
         this.radiuslight = 10;
         
-        // Add background
-        var background = this.add.image(0, 0, 'map1').setOrigin(0);
-        background.setPipeline('Light2D');
-
-        // Add player
-        this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
-
         // Add bottle Group
         this.bottleGroup = this.add.group({
             //runChildUpdate: true
         });
 
-        // Level 1 layout
-        this.levelOneSetup();
-        /*
-        this.newBottle(600,700);
-        this.newBottle(300, 500);
-        this.wall1 = new Wall(this, -270,585, 'wall', 745, 225).setOrigin(0,0);
-        this.physics.add.collider(this.player, this.wall1);
-        */
+        // Add player
+        this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
+        this.player.depth = 1;
 
+        // Setup each level
+        switch(level){
+            case 1:
+                this.background = this.add.image(0, 0, 'map1').setOrigin(0);
+                this.levelOneSetup();
+                break;
+            case 2:
+                this.background = this.add.image(0, 0, 'map2').setOrigin(0);
+                this.levelTwoSetup();
+                break;
+        }
+        this.background.setPipeline('Light2D');
+        
 
         // Create lights (light1 for player footsteps, light2 for enemy footsteps, light3 for bottle)
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
@@ -61,16 +63,9 @@ class Play extends Phaser.Scene{
         this.light2 = this.lights.addLight(200, 200, 0).setColor(0xffffff).setIntensity(3);
         this.light2New = true;
 
-        /* Camera setup
-        this.cameras.main.setBounds(0, 0, 2160, 2160);
-        this.cameras.main.setZoom(0.5);
-        this.cameras.main.startFollow(this.player);
-        this.cameras.main.setLerp(0.1, 0.1);
-        */
-
         // Will create a new footstep sound wave every 2 seconds
         this.waveSpawnTimer = this.time.addEvent({
-            delay: 1000,
+            delay: 1500,
             callback: this.createFootstep,
             callbackScope: this,
             loop: true,
@@ -84,9 +79,11 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.player, this.wall1);
     }
 
+    // Creates New Bottles at set location (x, y)
     newBottle(x, y) {
         // Add bottle
-        var bottle = new Bottle(this, x, y, 'bottle').setOrigin(0.5);
+        var bottle = new Bottle(this, x, y, 'bottle', this.player).setOrigin(0.5);
+        // Create collision check between player and bottle
         var collider = this.physics.add.overlap(this.player, bottle, (player, bottle) => {
             if (this.player.hasBottle() == false) {
                 this.player.pickedUpBottle();
@@ -104,7 +101,7 @@ class Play extends Phaser.Scene{
         this.light1Radius = 0;
         this.light1.setPosition(this.player.x, this.player.y);
         this.time.addEvent({
-            delay: 800,
+            delay: 1000,
             callback: () => {
                 this.light1New = false;
             }
@@ -139,10 +136,10 @@ class Play extends Phaser.Scene{
             this.light1.setRadius(0);
         }
 
-        if(this.player.isMoving()){
+        /*if(this.player.isMoving()){
             console.log(this.player.x);
             console.log(this.player.y);
-        }
+        }*/
         
         // Makes wave expand and stop after a certain scale is reached
         /*if(this.newWave){
