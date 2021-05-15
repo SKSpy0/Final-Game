@@ -49,7 +49,7 @@ class Play extends Phaser.Scene{
         
         // Add bottle Group
         this.bottleGroup = this.add.group();
-        this.WallGroup = this.add.group();
+        this.wallGroup = this.add.group();
 
         // Add player
         this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
@@ -85,7 +85,13 @@ class Play extends Phaser.Scene{
             callbackScope: this,
             loop: true,
         });
-        
+
+        for (var i = 0; i < this.bottleGroup.getLength(); i++) {
+            var update = this.bottleGroup.getChildren()[i];
+            this.physics.add.overlap(update, this.wallGroup, (update, wallGroup) => {
+                update.hitWall();
+            });
+        }
     }
 
     levelOneSetup() {
@@ -93,19 +99,19 @@ class Play extends Phaser.Scene{
         this.newBottle(200, 350);
         var wall = new Wall(this, 0,427, 'wall', 373, 113).setOrigin(0,0);
         this.physics.add.collider(this.player, wall);
-        this.WallGroup.add(wall);
+        this.wallGroup.add(wall);
         wall = new Wall(this, 486,128, 'wall', 60, 412).setOrigin(0,0);
         this.physics.add.collider(this.player, wall);
-        this.WallGroup.add(wall);
+        this.wallGroup.add(wall);
         wall = new Wall(this, 378,340, 'wall', 110, 30).setOrigin(0,0);
         this.physics.add.collider(this.player, wall);
-        this.WallGroup.add(wall);
+        this.wallGroup.add(wall);
         wall = new Wall(this, 109,125, 'wall', 270, 170).setOrigin(0,0);
         this.physics.add.collider(this.player, wall);
-        this.WallGroup.add(wall);
+        this.wallGroup.add(wall);
         wall = new Wall(this, 0,0, 'wall', 14, 540).setOrigin(0,0);
         this.physics.add.collider(this.player, wall);
-        this.WallGroup.add(wall);
+        this.wallGroup.add(wall);
         wall = new Wall(this, 0,0, 'wall', 540, 10).setOrigin(0,0);
         this.physics.add.collider(this.player, wall);
         wall = new Wall(this, 530, 10, 'wall', 25,117).setOrigin(0,0);
@@ -117,7 +123,7 @@ class Play extends Phaser.Scene{
                     this.scene.start('MenuScene');
                 })
         });
-        this.WallGroup.add(wall);
+        this.wallGroup.add(wall);
     }
 
     // Creates New Bottles at set location (x, y)
@@ -176,6 +182,7 @@ class Play extends Phaser.Scene{
         for (var i = 0; i < this.bottleGroup.getLength(); i++) {
             var update = this.bottleGroup.getChildren()[i];
             update.update(this.player.x, this.player.y);
+
             // If bottle has been thrown
             if(update.hasThrown() == true) {
                 this.player.thrownBottle();
