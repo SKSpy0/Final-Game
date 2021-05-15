@@ -5,14 +5,16 @@ class Play extends Phaser.Scene{
 
     preload() {
         // Loading temporary assets
-        this.load.image('background', './assets/kermitchoke.jpg');
+        this.load.image('map1', './assets/Map01.png');
         this.load.image('player', './assets/tempPlayer.png');
-        this.load.image('wave', './assets/wave.png');
+        this.load.image('wave', './assets/wave2.png');
     }
 
     create() {
         // Fade in transition
         this.cameras.main.fadeIn(1000, 0, 0, 0);
+        this.cameras.main.setZoom(0.5);
+
         // Set cursors
         //cursors = this.input.keyboard.createCursorKeys();
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -21,34 +23,38 @@ class Play extends Phaser.Scene{
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
         // Add background
-        this.background = this.add.image(0, 0, 'background').setOrigin(0);
-        this.background.setScale(4);
+        this.background = this.add.image(-270, -270, 'map1').setOrigin(0);
+        this.background.setScale(2);
 
         // Add player
-        this.player = new Player(this, 1080, 1080, 'player').setOrigin(0.5);
+        this.player = new Player(this, 600, 780, 'player').setOrigin(0.5);
+        
 
         // Create wave parameters
         this.wave = this.make.sprite({
-            x: 1080,
-            y: 1080,
+            x: this.player.x,
+            y: this.player.y,
             key: 'wave',
             add: false
         });
         this.newWave = true; // Used for checking when to expand and stop a wave
 
-        //create mask between wave and background
-        this.background.mask = new Phaser.Display.Masks.BitmapMask(this, this.wave);
 
-        // Camera setup
+        /* Camera setup
         this.cameras.main.setBounds(0, 0, 2160, 2160);
         this.cameras.main.setZoom(0.5);
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setLerp(0.1, 0.1);
+        */
+        
 
         // Wave group
         this.waveGroup = this.add.group({
             runChildUpdate:true
         });
+
+        //create mask between wave and background
+        //this.background.mask = new Phaser.Display.Masks.BitmapMask(this, this.wave);
 
         // Will update and move a wave to player every 2 seconds
         this.waveCreateClock = this.time.addEvent({
@@ -72,6 +78,10 @@ class Play extends Phaser.Scene{
 
     update() {
         this.player.update();
+        if(this.player.isMoving()){
+            console.log(this.player.x);
+            console.log(this.player.y);
+        }
         
         // Makes wave expand and stop after a certain scale is reached
         if(this.newWave){
