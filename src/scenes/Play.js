@@ -16,7 +16,7 @@ class Play extends Phaser.Scene{
 
         // Fade in transition and camera zoom
         this.cameras.main.fadeIn(1000, 0, 0, 0);
-        this.cameras.main.setZoom(0.5);
+        //this.cameras.main.setZoom(0.5);
 
         // Set cursors
         //cursors = this.input.keyboard.createCursorKeys();
@@ -32,11 +32,11 @@ class Play extends Phaser.Scene{
         this.radiuslight = 10;
         
         // Add background
-        var background = this.add.image(-270, -270, 'map1').setOrigin(0).setScale(2);
+        var background = this.add.image(0, 0, 'map1').setOrigin(0);
         background.setPipeline('Light2D');
 
         // Add player
-        this.player = new Player(this, 600, 780, 'player').setOrigin(0.5);
+        this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
 
         // Add bottle Group
         this.bottleGroup = this.add.group({
@@ -78,8 +78,8 @@ class Play extends Phaser.Scene{
     }
 
     levelOneSetup() {
-        this.newBottle(600,700);
-        this.newBottle(300, 500);
+        this.newBottle(430, 460);
+        this.newBottle(200, 350);
         this.wall1 = new Wall(this, -270,585, 'wall', 745, 225).setOrigin(0,0);
         this.physics.add.collider(this.player, this.wall1);
     }
@@ -139,10 +139,10 @@ class Play extends Phaser.Scene{
             this.light1.setRadius(0);
         }
 
-        /*if(this.player.isMoving()){
+        if(this.player.isMoving()){
             console.log(this.player.x);
             console.log(this.player.y);
-        }*/
+        }
         
         // Makes wave expand and stop after a certain scale is reached
         /*if(this.newWave){

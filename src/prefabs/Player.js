@@ -8,7 +8,7 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         scene.add.existing(this);
 
         // Set movement speed
-        this.playerVelocity = 200;
+        this.playerVelocity = 150;
 
         this.holdingBottle = false;
     }
