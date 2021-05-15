@@ -13,6 +13,9 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
         // To check if bottle is thrown
         this.throwing = false;
 
+        // True if bottle lands and breaks
+        this.landed = false;
+
         // X and Y value the bottle will end at
         this.travelToX = 0;
         this.travelToY = 0;
@@ -58,9 +61,15 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
             }
         }
         if (this.throwing == true && this.distanceToX < 1 && this.distanceToY < 1) {
+            this.landed = true;
             console.log("destroy");
             this.destroy();
         }
+    }
+
+    // Bottle has landed and broke
+    landedCheck() {
+        return this.landed;
     }
 
     // The bottle has been picked up
