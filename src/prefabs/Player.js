@@ -5,7 +5,7 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         scene.physics.add.existing(this);
         
         // Adds player to scene
-        this.scene.add.existing(this);
+        scene.add.existing(this);
 
         // Set movement speed
         this.playerVelocity = 200;

@@ -12,7 +12,8 @@ class Play extends Phaser.Scene{
     }
 
     create() {
-        // Fade in transition
+
+        // Fade in transition and camera zoom
         this.cameras.main.fadeIn(1000, 0, 0, 0);
         this.cameras.main.setZoom(0.5);
 
@@ -24,9 +25,13 @@ class Play extends Phaser.Scene{
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         pointer = this.input.activePointer;
 
+        // Enables lights and sets ambient color
+        this.lights.enable().setAmbientColor(0x000000);
+        this.radiuslight = 10;
+        
         // Add background
-        this.background = this.add.image(-270, -270, 'map1').setOrigin(0);
-        this.background.setScale(2);
+        var background = this.add.image(-270, -270, 'map1').setOrigin(0).setScale(2);
+        background.setPipeline('Light2D');
 
         // Add player
         this.player = new Player(this, 600, 780, 'player').setOrigin(0.5);
@@ -47,6 +52,13 @@ class Play extends Phaser.Scene{
         });
         this.newWave = true; // Used for checking when to expand and stop a wave
 
+        // Create lights (light1 for player footsteps, light2 for enemy footsteps, light3 for bottle)
+        this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
+        this.light1New = true;
+        this.light1Radius = 0;
+
+        this.light2 = this.lights.addLight(200, 200, 0).setColor(0xffffff).setIntensity(3);
+        this.light2New = true;
 
         /* Camera setup
         this.cameras.main.setBounds(0, 0, 2160, 2160);
@@ -54,22 +66,13 @@ class Play extends Phaser.Scene{
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setLerp(0.1, 0.1);
         */
-        
 
-        // Wave group
-        this.waveGroup = this.add.group({
-            runChildUpdate:true
-        });
-
-        //create mask between wave and background
-        //this.background.mask = new Phaser.Display.Masks.BitmapMask(this, this.wave);
-
-        // Will update and move a wave to player every 2 seconds
-        this.waveCreateClock = this.time.addEvent({
-            delay: 2000,
-            callback: this.moveWave,
+        // Will create a new footstep sound wave every 2 seconds
+        this.waveSpawnTimer = this.time.addEvent({
+            delay: 1000,
+            callback: this.createFootstep,
             callbackScope: this,
-            loop: true
+            loop: true,
         });
     }
 
@@ -97,6 +100,20 @@ class Play extends Phaser.Scene{
         this.newWave = true;
         console.log("wave created");
     }
+    //generates footsteps
+    createFootstep(){
+        this.light1New = true;
+        this.light1Radius = 0;
+        this.light1.setPosition(this.player.x, this.player.y);
+        this.time.addEvent({
+            delay: 800,
+            callback: () => {
+                this.light1New = false;
+            }
+        })
+        // Play audio footstep
+        console.log("footstep created");
+    }
 
     update() {
         this.player.update();
@@ -120,16 +137,29 @@ class Play extends Phaser.Scene{
             //console.log(this.player.x);
             //console.log(this.player.y);
         }
+        // Wave effect for Lights
+        if(this.light1New){
+            this.light1Radius += 3.5
+            this.light1.setRadius(this.light1Radius);
+        } else {
+            this.light1.setRadius(0);
+        }
+
+        /*if(this.player.isMoving()){
+            console.log(this.player.x);
+            console.log(this.player.y);
+        }*/
         
         // Makes wave expand and stop after a certain scale is reached
-        if(this.newWave){
-            this.wave.scaleX += 0.1;
-            this.wave.scaleY += 0.1;
-            if(this.wave.scaleX >= 25){
+        /*if(this.newWave){
+            this.wave.scaleX += 0.2;
+            this.wave.scaleY += 0.2;
+            if(this.wave.scaleX >= 30){
                 this.newWave = false;
+                
             }
         } else {
             this.wave.alpha = 0;
-        }
+        } */
     }
 }
