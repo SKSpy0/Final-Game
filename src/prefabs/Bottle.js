@@ -60,7 +60,7 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
                 this.distanceToY *= -1;
             }
         }
-        if (this.throwing == true && this.distanceToX < 1 && this.distanceToY < 1) {
+        if (this.throwing == true && this.distanceToX <= 5 && this.distanceToY <= 5) {
             this.landed = true;
             console.log("destroy");
             this.destroy();

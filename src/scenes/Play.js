@@ -57,7 +57,7 @@ class Play extends Phaser.Scene{
 
         // Create lights (light1 for player footsteps, light2 for enemy footsteps, light3 for bottle)
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
-        this.light1New = true;
+        this.light1New = false;
         this.light1Radius = 0;
 
         this.light2 = this.lights.addLight(200, 200, 0).setColor(0xffffff).setIntensity(3);
@@ -65,13 +65,13 @@ class Play extends Phaser.Scene{
         this.light1Radius = 0;
 
         // Will create a new footstep sound wave every 2 seconds
-        /*this.waveSpawnTimer = this.time.addEvent({
+        this.waveSpawnTimer = this.time.addEvent({
             delay: 1000,
             callback: this.createFootstep,
             callbackScope: this,
             loop: true,
         });
-        */
+        
     }
 
     levelOneSetup() {
@@ -104,6 +104,7 @@ class Play extends Phaser.Scene{
     newBottle(x, y) {
         // Add bottle
         var bottle = new Bottle(this, x, y, 'bottle', this.player).setOrigin(0.5);
+        bottle.setPipeline('Light2D');
         // Create collision check between player and bottle
         var collider = this.physics.add.overlap(this.player, bottle, (player, bottle) => {
             if (this.player.hasBottle() == false) {
@@ -122,7 +123,7 @@ class Play extends Phaser.Scene{
         this.light1Radius = 0;
         this.light1.setPosition(this.player.x, this.player.y);
         this.time.addEvent({
-            delay: 800,
+            delay: 500,
             callback: () => {
                 this.light1New = false;
             }
@@ -137,7 +138,7 @@ class Play extends Phaser.Scene{
         this.light2Radius = 0;
         this.light2.setPosition(bottle.x, bottle.y);
         this.time.addEvent({
-            delay: 1000,
+            delay: 1200,
             callback: () => {
                 this.light2New = false;
             }
@@ -167,23 +168,34 @@ class Play extends Phaser.Scene{
                 console.log('bottle landed');
                 if(!this.light2New){
                     this.createBottleWave(update);
-                } else {
-                    this.light2Radius += 3.5;
-                    this.light2.setRadius(this.light2Radius);
                 }
-            } else {
-                this.light2.setRadius(0);
             }
         }
 
-        /* Wave effect for Lights
+        // Wave effect for Lights
         if(this.light1New){
-            this.light1Radius += 3.5
+            this.light1Radius += 1.8
             this.light1.setRadius(this.light1Radius);
         } else {
-            this.light1.setRadius(0);
+            this.light1Radius -= 1.8
+            this.light1.setRadius(this.light1Radius);
+            if(this.light1Radius <= 0){
+                this.light1.setRadius(0);
+            }
+        } 
+
+        // Wave effect for Lights
+        if(this.light2New){
+            this.light2Radius += 1.8
+            this.light2.setRadius(this.light2Radius);
+        } else {
+            this.light2Radius -= 1.8
+            this.light2.setRadius(this.light2Radius);
+            if(this.light2Radius <= 0){
+                this.light2.setRadius(0);
+            }
         }
-        */
+        
 
         /*if(this.player.isMoving()){
             console.log(this.player.x);
