@@ -42,15 +42,6 @@ class Play extends Phaser.Scene{
         });
         this.newBottle(600,700);
         this.newBottle(300, 500);
-        
-        // Create wave parameters
-        this.wave = this.make.sprite({
-            x: this.player.x,
-            y: this.player.y,
-            key: 'wave',
-            add: false
-        });
-        this.newWave = true; // Used for checking when to expand and stop a wave
 
         // Create lights (light1 for player footsteps, light2 for enemy footsteps, light3 for bottle)
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
@@ -90,16 +81,6 @@ class Play extends Phaser.Scene{
         this.bottleGroup.add(bottle);
     }
 
-    //moves wave to new spot
-    moveWave(){
-        this.wave.scaleX = 0.5;
-        this.wave.scaleY = 0.5;
-        this.wave.x = this.player.x;
-        this.wave.y = this.player.y;
-        this.wave.alpha = 1;
-        this.newWave = true;
-        console.log("wave created");
-    }
     //generates footsteps
     createFootstep(){
         this.light1New = true;
@@ -133,10 +114,6 @@ class Play extends Phaser.Scene{
             }
         }
 
-        if(this.player.isMoving()){
-            //console.log(this.player.x);
-            //console.log(this.player.y);
-        }
         // Wave effect for Lights
         if(this.light1New){
             this.light1Radius += 3.5
