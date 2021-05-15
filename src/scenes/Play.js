@@ -8,6 +8,7 @@ class Play extends Phaser.Scene{
         this.load.image('map1', './assets/Map01.png');
         this.load.image('player', './assets/tempPlayer.png');
         this.load.image('wave', './assets/wave2.png');
+        this.load.image('bottle', './assets/bottle.png');
     }
 
     create() {
@@ -21,6 +22,7 @@ class Play extends Phaser.Scene{
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        pointer = this.input.activePointer;
 
         // Add background
         this.background = this.add.image(-270, -270, 'map1').setOrigin(0);
@@ -28,8 +30,14 @@ class Play extends Phaser.Scene{
 
         // Add player
         this.player = new Player(this, 600, 780, 'player').setOrigin(0.5);
-        
 
+        // Add bottle
+        this.bottleGroup = this.add.group({
+            //runChildUpdate: true
+        });
+        this.newBottle(600,700);
+        this.newBottle(300, 500);
+        
         // Create wave parameters
         this.wave = this.make.sprite({
             x: this.player.x,
@@ -65,6 +73,20 @@ class Play extends Phaser.Scene{
         });
     }
 
+    newBottle(x, y) {
+        // Add bottle
+        var bottle = new Bottle(this, x, y, 'bottle').setOrigin(0.5);
+        var collider = this.physics.add.overlap(this.player, bottle, (player, bottle) => {
+            if (this.player.hasBottle() == false) {
+                this.player.pickedUpBottle();
+                bottle.pickedUp();
+                console.log("picked up bottle");
+                this.physics.world.removeCollider(collider);
+            }
+        });
+        this.bottleGroup.add(bottle);
+    }
+
     //moves wave to new spot
     moveWave(){
         this.wave.scaleX = 0.5;
@@ -78,9 +100,25 @@ class Play extends Phaser.Scene{
 
     update() {
         this.player.update();
+
+        // Update bottles in bottle group
+        for (var i = 0; i < this.bottleGroup.getLength(); i++) {
+            var update = this.bottleGroup.getChildren()[i];
+            update.update(this.player.x, this.player.y);
+            // If bottle has been thrown
+            if(update.hasThrown() == true) {
+                this.player.thrownBottle();
+                // Set a delay for throwing the next bottle
+                for (var j = 0; j < this.bottleGroup.getLength(); j++) {
+                    var delayCall = this.bottleGroup.getChildren()[j];
+                    delayCall.delay(this.time);
+                }
+            }
+        }
+
         if(this.player.isMoving()){
-            console.log(this.player.x);
-            console.log(this.player.y);
+            //console.log(this.player.x);
+            //console.log(this.player.y);
         }
         
         // Makes wave expand and stop after a certain scale is reached

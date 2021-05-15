@@ -10,8 +10,7 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         // Set movement speed
         this.playerVelocity = 200;
 
-        // If player is moving
-        this.moving = false;
+        this.holdingBottle = false;
     }
 
     update() {
@@ -40,5 +39,15 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 
     isMoving(){
         return this.moving;
+    }
+    pickedUpBottle() {
+        this.holdingBottle = true;
+    }
+    hasBottle() {
+        return this.holdingBottle;
+    }
+
+    thrownBottle() {
+        this.holdingBottle = false;
     }
 }
