@@ -10,14 +10,29 @@ class Play extends Phaser.Scene{
         this.load.image('player', './assets/PlayerA.png');
         this.load.image('wave', './assets/wave2.png');
         this.load.image('bottle', './assets/bottle.png');
-        this.load.image('wall', './assets/wallTest.png')
+        this.load.image('wall', './assets/wallTest.png');
+        this.load.audio('bottlePickup', './assets/glassBottlePickup.mp3');
+        this.load.audio('bottleBreak', './assets/glassBottleBreak.mp3');
+        this.load.audio('throw', './assets/throw.mp3');
     }
 
     create() {
-
-        // Fade in transition and camera zoom
+        // Fade in transition
         this.cameras.main.fadeIn(1000, 0, 0, 0);
-        //this.cameras.main.setZoom(0.5);
+        
+        //assign sounds
+        this.bottlePickupSound = this.sound.add('bottlePickup', {
+            loop: false,
+            volume: 0.5
+        });
+        this.bottleBreakSound = this.sound.add('bottleBreak', {
+            loop: false,
+            volume: 0.3
+        });
+        this.throwSound = this.sound.add('throw', {
+            loop: false,
+            volume: 1
+        });
 
         // Set cursors
         //cursors = this.input.keyboard.createCursorKeys();
@@ -108,6 +123,7 @@ class Play extends Phaser.Scene{
         // Create collision check between player and bottle
         var collider = this.physics.add.overlap(this.player, bottle, (player, bottle) => {
             if (this.player.hasBottle() == false) {
+                this.bottlePickupSound.play();
                 this.player.pickedUpBottle();
                 bottle.pickedUp();
                 console.log("picked up bottle");
@@ -137,6 +153,7 @@ class Play extends Phaser.Scene{
         this.light2New = true;
         this.light2Radius = 0;
         this.light2.setPosition(bottle.x, bottle.y);
+        this.bottleBreakSound.play();
         this.time.addEvent({
             delay: 1200,
             callback: () => {
@@ -157,6 +174,7 @@ class Play extends Phaser.Scene{
             // If bottle has been thrown
             if(update.hasThrown() == true) {
                 this.player.thrownBottle();
+                this.throwSound.play();
                 // Set a delay for throwing the next bottle
                 for (var j = 0; j < this.bottleGroup.getLength(); j++) {
                     var delayCall = this.bottleGroup.getChildren()[j];
