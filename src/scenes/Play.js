@@ -9,6 +9,7 @@ class Play extends Phaser.Scene{
         this.load.image('player', './assets/tempPlayer.png');
         this.load.image('wave', './assets/wave2.png');
         this.load.image('bottle', './assets/bottle.png');
+        this.load.image('wall', './assets/wallTest.png')
     }
 
     create() {
@@ -27,6 +28,7 @@ class Play extends Phaser.Scene{
 
         // Enables lights and sets ambient color
         this.lights.enable().setAmbientColor(0x000000);
+        //this.lights.enable();
         this.radiuslight = 10;
         
         // Add background
@@ -36,12 +38,17 @@ class Play extends Phaser.Scene{
         // Add player
         this.player = new Player(this, 600, 780, 'player').setOrigin(0.5);
 
-        // Add bottle
+        // Add bottle Group
         this.bottleGroup = this.add.group({
             //runChildUpdate: true
         });
+
+        // Level 1 layout
         this.newBottle(600,700);
         this.newBottle(300, 500);
+        this.wall1 = new Wall(this, -270,585, 'wall', 745, 225).setOrigin(0,0);
+        this.physics.add.collider(this.player, this.wall1);
+
 
         // Create lights (light1 for player footsteps, light2 for enemy footsteps, light3 for bottle)
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
