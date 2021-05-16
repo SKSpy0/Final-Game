@@ -3,7 +3,7 @@ let config = {
     width: 540,
     height: 540,
     maxLights: 25,
-    scene: [Menu, Play],
+    scene: [Menu, Play, Load],
     physics: {
         default: 'arcade',
         arcade: {
