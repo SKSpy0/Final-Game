@@ -155,7 +155,7 @@ class Play extends Phaser.Scene{
                     this.scene.start('LoadScene');
                 })
         });
-        this.wallGroup.add(exit);
+        //this.wallGroup.add(exit);
     }
 
     // Setup for Level Two
@@ -201,11 +201,12 @@ class Play extends Phaser.Scene{
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                    level++;
-                    this.scene.start('LoadScene');
+                    //level++;
+                    //this.scene.start('LoadScene');
+                    this.scene.start('MenuScene');
                 })
         });
-        this.wallGroup.add(exit);
+        //this.wallGroup.add(exit);
     }
 
     // Creates new wall in level
