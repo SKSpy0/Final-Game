@@ -49,8 +49,8 @@ class Play extends Phaser.Scene{
         pointer = this.input.activePointer;
 
         // Enables lights and sets ambient color
-        this.lights.enable().setAmbientColor(0x000000);
-        //this.lights.enable();
+        //this.lights.enable().setAmbientColor(0x000000);
+        this.lights.enable();
         this.radiuslight = 10;
         
         // Create bottle, wall, and enemy group
@@ -62,6 +62,7 @@ class Play extends Phaser.Scene{
 
         // Add player
         this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
+        this.player.setCollideWorldBounds(true);
         this.player.depth = 1;
 
         // Setup each level
@@ -94,6 +95,7 @@ class Play extends Phaser.Scene{
             loop: true,
         });
 
+        // Sets overlap between bottle and walls
         for (var i = 0; i < this.bottleGroup.getLength(); i++) {
             var update = this.bottleGroup.getChildren()[i];
             this.physics.add.overlap(update, this.wallGroup, (update, wallGroup) => {
@@ -107,39 +109,65 @@ class Play extends Phaser.Scene{
         this.newBottle(200, 350);
         this.spawnEnemy(460, 150, false, 2);
         this.spawnEnemy(405, 150, false, 2);
-        var wall = new Wall(this, 0,427, 'wall', 373, 113).setOrigin(0,0);
-        this.physics.add.collider(this.player, wall);
-        this.wallGroup.add(wall);
-        wall = new Wall(this, 486,128, 'wall', 60, 412).setOrigin(0,0);
-        this.physics.add.collider(this.player, wall);
-        this.wallGroup.add(wall);
-        wall = new Wall(this, 378,340, 'wall', 110, 30).setOrigin(0,0);
-        this.physics.add.collider(this.player, wall);
-        this.wallGroup.add(wall);
-        wall = new Wall(this, 109,125, 'wall', 270, 170).setOrigin(0,0);
-        this.physics.add.collider(this.player, wall);
-        this.wallGroup.add(wall);
-        wall = new Wall(this, 0,0, 'wall', 14, 540).setOrigin(0,0);
-        this.physics.add.collider(this.player, wall);
-        this.wallGroup.add(wall);
-        wall = new Wall(this, 0,0, 'wall', 540, 10).setOrigin(0,0);
-        this.physics.add.collider(this.player, wall);
-        wall = new Wall(this, 530, 10, 'wall', 25,117).setOrigin(0,0);
-        var collider = this.physics.add.overlap(this.player, wall, (player, wall) => {
+        this.newWall(0, 427, 373, 113);
+        this.newWall(486, 128, 60, 412);
+        this.newWall(378, 340, 110, 30);
+        this.newWall(109, 125, 270, 170);
+        this.newWall(0, 0, 14, 540);
+        this.newWall(0, 0, 540, 10);
+        var exit = new Wall(this, 530, 10, 'wall', 25,117).setOrigin(0,0);
+        var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
                 console.log("Level Complete");
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                    this.scene.start('MenuScene');
+                    level++;
+                    this.scene.start('LoadScene');
                 })
         });
+        this.wallGroup.add(exit);
+    }
+
+    levelTwoSetup() {
+        this.player.x = 20;
+        this.player.y = 500;
+        this.newBottle(60, 500);
+        this.newBottle(400, 490);
+        this.newBottle(415, 325);
+        this.newWall(0, 389, 159, 53);
+        this.newWall(215, 389, 53, 53);
+        this.newWall(344, 277, 105, 15);
+        this.newWall(260, 0, 90, 159);
+        this.newWall(527, 273, 14, 265);
+        this.newWall(0, 530, 540, 10);
+        this.newWall(350, 360, 15, 82);
+        this.newWall(350, 427, 97, 15);
+        this.newWall(0, 162, 12, 15);
+        this.newWall(115, 162, 235, 15);
+        var exit = new Wall(this, 205, 0, 'wall', 50,50).setOrigin(0,0);
+        var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
+                console.log("Level Complete");
+                this.physics.world.removeCollider(collider);
+                this.cameras.main.fadeOut(500, 0, 0, 0);
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                    level++;
+                    this.scene.start('LoadScene');
+                })
+        });
+        this.wallGroup.add(exit);
+    }
+
+    // Creates new wall in level
+    newWall(x, y, width, height) {
+        var wall = new Wall(this, x, y, 'wall', width, height).setOrigin(0,0);
+        this.physics.add.collider(this.player, wall);
         this.wallGroup.add(wall);
     }
 
     // Creates New Bottles at set location (x, y)
     newBottle(x, y) {
         // Add bottle
-        var bottle = new Bottle(this, x, y, 'bottle', this.player).setOrigin(0.5);
+        var bottle = new Bottle(this, x, y, 'bottle').setOrigin(0.5);
         bottle.setPipeline('Light2D');
         // Create collision check between player and bottle
         var collider = this.physics.add.overlap(this.player, bottle, (player, bottle) => {
@@ -204,7 +232,7 @@ class Play extends Phaser.Scene{
                 break;
         }
         this.physics.add.overlap(this.player, enemy, (player, enemy) => {
-
+            
         });
         this.enemyGroup.add(enemy);
     }
@@ -220,7 +248,7 @@ class Play extends Phaser.Scene{
             // If bottle has been thrown
             if(update.hasThrown() == true) {
                 this.player.thrownBottle();
-                this.throwSound.play();
+                //this.throwSound.play();
                 // Set a delay for throwing the next bottle
                 for (var j = 0; j < this.bottleGroup.getLength(); j++) {
                     var delayCall = this.bottleGroup.getChildren()[j];
