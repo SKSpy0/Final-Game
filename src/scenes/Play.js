@@ -113,6 +113,9 @@ class Play extends Phaser.Scene{
         // Spawn Player, Bottles, and Enemies in the level
         this.newBottle(430, 460);
         this.newBottle(200, 350);
+        this.newBottle(60, 276);
+        this.newBottle(60, 126);
+        this.newBottle(280, 64);
         this.spawnEnemy(460, 150, false, 2);
         this.spawnEnemy(405, 150, false, 2);
 
