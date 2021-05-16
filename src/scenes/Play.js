@@ -19,6 +19,9 @@ class Play extends Phaser.Scene{
     }
 
     create() {
+        // If Player gets caught
+        this.playerCaught = false;
+
         // Fade in transition
         this.cameras.main.fadeIn(1000, 0, 0, 0);
         
@@ -49,7 +52,7 @@ class Play extends Phaser.Scene{
         pointer = this.input.activePointer;
 
         // Enables lights and sets ambient color
-        //this.lights.enable().setAmbientColor(0x000000);
+        this.lights.enable().setAmbientColor(0x000000);
         this.lights.enable();
         this.radiuslight = 10;
         
@@ -216,8 +219,9 @@ class Play extends Phaser.Scene{
     // Spawns new enemies (roaming: true = yes, false = no)
     // (facing: up = 1, down = 2, left = 3, right = 4)
     spawnEnemy(PosX, PosY, roaming, facing){
-        let enemy = new Enemy(this, PosX, PosY, 'enemy', roaming);
-        enemy.setScale(0.8);
+        let enemy = new Enemy(this, PosX, PosY, 'enemy', roaming, facing);
+        enemy.setScale(0.7);
+        enemy.setPipeline('Light2D')
         switch(facing){
             case 1:
                 break;
@@ -231,13 +235,28 @@ class Play extends Phaser.Scene{
                 enemy.angle = 90;
                 break;
         }
-        this.physics.add.overlap(this.player, enemy, (player, enemy) => {
-            
+        this.physics.add.overlap(this.player, enemy, () => {
+            if(!this.playerCaught){
+                this.playerCaught = true;
+            } else {
+                console.log("death fade out")
+                this.cameras.main.fadeOut(500, 0, 0, 0);
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                this.scene.start('MenuScene');
+            })
+            }
         });
+
+        if(roaming){
+            this.physics.add.overlap(enemy, this.wallGroup, (enemy) => {
+                enemy.turnAround();
+            })
+        }
         this.enemyGroup.add(enemy);
     }
 
     update() {
+        // Updates player
         this.player.update();
 
         // Update bottles in bottle group
@@ -288,9 +307,9 @@ class Play extends Phaser.Scene{
             }
         }
     
-        if(this.player.isMoving()){
+        /*if(this.player.isMoving()){
             console.log(this.player.x);
             console.log(this.player.y);
-        }
+        } */
     }
 }
