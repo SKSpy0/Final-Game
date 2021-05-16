@@ -12,6 +12,7 @@ class Play extends Phaser.Scene{
         this.load.image('wave', './assets/wave2.png');
         this.load.image('bottle', './assets/bottle.png');
         this.load.image('wall', './assets/wallTest.png');
+        this.load.image('footprint', './assets/footPrint.png');
         this.load.audio('bottlePickup', './assets/glassBottlePickup.mp3');
         this.load.audio('bottleBreak', './assets/glassBottleBreak.mp3');
         this.load.audio('throw', './assets/throw.mp3');
@@ -19,8 +20,9 @@ class Play extends Phaser.Scene{
     }
 
     create() {
-        // If Player gets caught
+        // Variables for player being caught and if game over has been initiated
         this.playerCaught = false;
+        this.gameOver = false;
 
         // Fade in transition
         this.cameras.main.fadeIn(1000, 0, 0, 0);
@@ -108,10 +110,12 @@ class Play extends Phaser.Scene{
     }
 
     levelOneSetup() {
+        // Spawn Player, Bottles, and Enemies in the level
         this.newBottle(430, 460);
         this.newBottle(200, 350);
         this.spawnEnemy(460, 150, false, 2);
         this.spawnEnemy(405, 150, false, 2);
+
         // Boundary walls
         this.newWall(0, 0, 540, 4);
         this.newWall(0, 536, 540, 4);
@@ -125,7 +129,10 @@ class Play extends Phaser.Scene{
         this.newWall(109, 125, 270, 170);
         this.newWall(0, 0, 14, 540);
         this.newWall(0, 0, 540, 10);
-        var exit = new Wall(this, 530, 10, 'wall', 25,117).setOrigin(0,0);
+
+        // Spawn Exit
+        var exit = new Wall(this, 500, 35, 'footprint', 30,30).setOrigin(0,0);
+        exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
                 console.log("Level Complete");
                 this.physics.world.removeCollider(collider);
@@ -139,11 +146,19 @@ class Play extends Phaser.Scene{
     }
 
     levelTwoSetup() {
+        // Spawn Player, Bottles, and Enemies in the level
         this.player.x = 20;
         this.player.y = 500;
         this.newBottle(60, 500);
         this.newBottle(400, 490);
         this.newBottle(415, 325);
+        this.newBottle(500, 55);
+        this.newBottle(450, 55);
+        this.newBottle(400, 55);
+        this.spawnEnemy(40, 165, true, 2);
+        this.spawnEnemy(232, 360, true, 3);
+        this.spawnEnemy(320, 255, false, 4);
+        this.spawnEnemy(320, 210, false, 4);
 
         // Boundary walls
         this.newWall(0, 0, 540, 4);
@@ -162,7 +177,10 @@ class Play extends Phaser.Scene{
         this.newWall(350, 427, 97, 15);
         this.newWall(0, 162, 12, 15);
         this.newWall(115, 162, 235, 15);
-        var exit = new Wall(this, 205, 0, 'wall', 50,50).setOrigin(0,0);
+
+        // Spawn Exit
+        var exit = new Wall(this, 205, 15, 'footprint', 30,30).setOrigin(0,0);
+        exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
                 console.log("Level Complete");
                 this.physics.world.removeCollider(collider);
@@ -250,15 +268,10 @@ class Play extends Phaser.Scene{
                 enemy.angle = 90;
                 break;
         }
+        // player and enemy collision will cause a game over
         this.physics.add.overlap(this.player, enemy, () => {
             if(!this.playerCaught){
                 this.playerCaught = true;
-            } else {
-                console.log("death fade out")
-                this.cameras.main.fadeOut(500, 0, 0, 0);
-                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                this.scene.start('MenuScene');
-            })
             }
         });
 
@@ -271,6 +284,16 @@ class Play extends Phaser.Scene{
     }
 
     update() {
+        // End game when player gets caught
+        if(!this.gameOver && this.playerCaught){
+            console.log("death fade out")
+            this.gameOver = true;
+            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                this.scene.start('MenuScene');
+            })
+        }
+
         // Updates player
         this.player.update();
 
@@ -322,9 +345,9 @@ class Play extends Phaser.Scene{
             }
         }
     
-        /*if(this.player.isMoving()){
+        if(this.player.isMoving()){
             console.log(this.player.x);
             console.log(this.player.y);
-        } */
+        } 
     }
 }

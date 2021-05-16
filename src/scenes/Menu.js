@@ -122,7 +122,7 @@ class Menu extends Phaser.Scene{
         if (this.nextScene == true && this.clicked == false) {
             this.cameras.main.fadeOut(1000, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                level = 1;
+                level = 2;
                 this.scene.start('PlayScene');
             })
             this.clicked = true;
