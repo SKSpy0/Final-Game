@@ -62,9 +62,13 @@ class Menu extends Phaser.Scene{
         var popup = this.add.group();
         var popupBack = this.add.sprite(centerWidth, centerHeight, 'popup').setOrigin(0.5);
         var text1 = this.add.bitmapText(popupBack.x, popupBack.y-100, 'customFont', "Controls", 36).setOrigin(0.5);
+        var text2 = this.add.bitmapText(popupBack.x, popupBack.y-50, 'customFont', "Move - WASD", 36).setOrigin(0.5);
+        var text3 = this.add.bitmapText(popupBack.x, popupBack.y, 'customFont', "Throw - LEFT CLICK", 36).setOrigin(0.5);
         var close = this.add.bitmapText(popupBack.x, popupBack.y+100, 'customFont', 'Close', 28).setOrigin(0.5);
         popup.add(popupBack);
         popup.add(text1);
+        popup.add(text2);
+        popup.add(text3);
         popup.add(close);
 
         // Set Close button interaction
