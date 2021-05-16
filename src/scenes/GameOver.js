@@ -6,6 +6,8 @@ class GameOver extends Phaser.Scene{
     create() {
         this.add.bitmapText(centerWidth, centerHeight/2, 'customFont', 'GAME OVER', 60).setOrigin(0.5);
         this.return = this.add.bitmapText(centerWidth, centerHeight+100, 'customFont', 'Return to main menu', 28).setOrigin(0.5);
+        this.return.setInteractive({useHandCursor: true});
+        
         // Initialize variables
         this.clicked = false;
         this.nextScene = false;
