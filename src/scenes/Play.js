@@ -8,12 +8,14 @@ class Play extends Phaser.Scene{
         this.load.image('map1', './assets/Map01.png');
         this.load.image('map2', './assets/Map02.png');
         this.load.image('player', './assets/PlayerA.png');
+        this.load.image('enemy', './assets/EnemyA.png');
         this.load.image('wave', './assets/wave2.png');
         this.load.image('bottle', './assets/bottle.png');
         this.load.image('wall', './assets/wallTest.png');
         this.load.audio('bottlePickup', './assets/glassBottlePickup.mp3');
         this.load.audio('bottleBreak', './assets/glassBottleBreak.mp3');
         this.load.audio('throw', './assets/throw.mp3');
+        this.load.audio('footstep', './assets/footStep1.mp3');
     }
 
     create() {
@@ -33,6 +35,10 @@ class Play extends Phaser.Scene{
             loop: false,
             volume: 1
         });
+        this.footStepSound = this.sound.add('footstep', {
+            loop: false,
+            volume: 0.5
+        });
 
         // Set cursors
         //cursors = this.input.keyboard.createCursorKeys();
@@ -47,9 +53,12 @@ class Play extends Phaser.Scene{
         //this.lights.enable();
         this.radiuslight = 10;
         
-        // Add bottle Group
+        // Create bottle, wall, and enemy group
         this.bottleGroup = this.add.group();
         this.wallGroup = this.add.group();
+        this.enemyGroup = this.add.group({
+            runChildUpdate: true
+        });
 
         // Add player
         this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
@@ -67,7 +76,6 @@ class Play extends Phaser.Scene{
                 break;
         }
         this.background.setPipeline('Light2D');
-        
 
         // Create lights (light1 for player footsteps, light2 for enemy footsteps, light3 for bottle)
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
@@ -97,6 +105,8 @@ class Play extends Phaser.Scene{
     levelOneSetup() {
         this.newBottle(430, 460);
         this.newBottle(200, 350);
+        this.spawnEnemy(460, 150, false, 2);
+        this.spawnEnemy(405, 150, false, 2);
         var wall = new Wall(this, 0,427, 'wall', 373, 113).setOrigin(0,0);
         this.physics.add.collider(this.player, wall);
         this.wallGroup.add(wall);
@@ -155,7 +165,7 @@ class Play extends Phaser.Scene{
                 this.light1New = false;
             }
         })
-        // Play audio footstep
+        //this.footStepSound.play();
         console.log("footstep created");
     }
 
@@ -173,6 +183,30 @@ class Play extends Phaser.Scene{
         })
 
         console.log("bottle wave created");
+    }
+
+    // Spawns new enemies (roaming: true = yes, false = no)
+    // (facing: up = 1, down = 2, left = 3, right = 4)
+    spawnEnemy(PosX, PosY, roaming, facing){
+        let enemy = new Enemy(this, PosX, PosY, 'enemy', roaming);
+        enemy.setScale(0.8);
+        switch(facing){
+            case 1:
+                break;
+            case 2:
+                enemy.angle = 180;
+                break;
+            case 3:
+                enemy.angle = -90;
+                break;
+            case 4:
+                enemy.angle = 90;
+                break;
+        }
+        this.physics.add.overlap(this.player, enemy, (player, enemy) => {
+
+        });
+        this.enemyGroup.add(enemy);
     }
 
     update() {
@@ -225,11 +259,10 @@ class Play extends Phaser.Scene{
                 this.light2.setRadius(0);
             }
         }
-        
-
-        /*if(this.player.isMoving()){
+    
+        if(this.player.isMoving()){
             console.log(this.player.x);
             console.log(this.player.y);
-        }*/
+        }
     }
 }
