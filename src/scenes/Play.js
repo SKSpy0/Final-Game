@@ -42,7 +42,7 @@ class Play extends Phaser.Scene{
         });
         this.footStepSound = this.sound.add('footstep', {
             loop: false,
-            volume: 0.5
+            volume: 0.15
         });
 
         // Set cursors
@@ -83,14 +83,22 @@ class Play extends Phaser.Scene{
         }
         this.background.setPipeline('Light2D');
 
-        // Create lights (light1 for player footsteps, light2 for enemy footsteps, light3 for bottle)
+        // Create lights (light1 for player footsteps, light2 for bottle, light3 for enemy footsteps)
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
         this.light1New = false;
         this.light1Radius = 0;
 
         this.light2 = this.lights.addLight(200, 200, 0).setColor(0xffffff).setIntensity(3);
         this.light2New = false;
-        this.light1Radius = 0;
+        this.light2Radius = 0;
+
+        this.light3 = this.lights.addLight(200, 200, 0).setColor(0xffffff).setIntensity(3);
+        this.light3New = false;
+        this.light3Radius = 0;
+
+        // Bottle pick up text for UI
+        this.bottlePickupText = this.add.bitmapText(45, 500, 'customFont', "picked up bottle", 32);
+        this.bottlePickupText.setAlpha(0);
 
         // Will create a new footstep sound wave every 2 seconds
         this.waveSpawnTimer = this.time.addEvent({
@@ -109,6 +117,7 @@ class Play extends Phaser.Scene{
         }
     }
 
+    // Setup for Level One
     levelOneSetup() {
         // Spawn Player, Bottles, and Enemies in the level
         this.newBottle(430, 460);
@@ -136,6 +145,7 @@ class Play extends Phaser.Scene{
         // Spawn Exit
         var exit = new Wall(this, 500, 35, 'footprint', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
+        // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
                 console.log("Level Complete");
                 this.physics.world.removeCollider(collider);
@@ -148,6 +158,7 @@ class Play extends Phaser.Scene{
         this.wallGroup.add(exit);
     }
 
+    // Setup for Level Two
     levelTwoSetup() {
         // Spawn Player, Bottles, and Enemies in the level
         this.player.x = 20;
@@ -184,6 +195,7 @@ class Play extends Phaser.Scene{
         // Spawn Exit
         var exit = new Wall(this, 205, 15, 'footprint', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
+        // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
                 console.log("Level Complete");
                 this.physics.world.removeCollider(collider);
@@ -211,6 +223,7 @@ class Play extends Phaser.Scene{
         // Create collision check between player and bottle
         var collider = this.physics.add.overlap(this.player, bottle, (player, bottle) => {
             if (this.player.hasBottle() == false) {
+                this.bottlePickupText.setAlpha(1);
                 this.bottlePickupSound.play();
                 this.player.pickedUpBottle();
                 bottle.pickedUp();
@@ -221,7 +234,7 @@ class Play extends Phaser.Scene{
         this.bottleGroup.add(bottle);
     }
 
-    //generates footsteps
+    //generates player footsteps
     createFootstep(){
         this.light1New = true;
         this.light1Radius = 0;
@@ -232,7 +245,7 @@ class Play extends Phaser.Scene{
                 this.light1New = false;
             }
         })
-        //this.footStepSound.play();
+        this.footStepSound.play();
         console.log("footstep created");
     }
 
@@ -250,6 +263,11 @@ class Play extends Phaser.Scene{
         })
 
         console.log("bottle wave created");
+    }
+
+    // generates enemy footsteps
+    createEnemyFootstep(){
+
     }
 
     // Spawns new enemies (roaming: true = yes, false = no)
@@ -277,7 +295,8 @@ class Play extends Phaser.Scene{
                 this.playerCaught = true;
             }
         });
-
+        
+        // enemy turn around if collided with a wall
         if(roaming){
             this.physics.add.overlap(enemy, this.wallGroup, (enemy) => {
                 enemy.turnAround();
@@ -308,6 +327,7 @@ class Play extends Phaser.Scene{
             // If bottle has been thrown
             if(update.hasThrown() == true) {
                 this.player.thrownBottle();
+                this.bottlePickupText.setAlpha(0);
                 //this.throwSound.play();
                 // Set a delay for throwing the next bottle
                 for (var j = 0; j < this.bottleGroup.getLength(); j++) {
@@ -348,9 +368,9 @@ class Play extends Phaser.Scene{
             }
         }
     
-        if(this.player.isMoving()){
+        /*if(this.player.isMoving()){
             console.log(this.player.x);
             console.log(this.player.y);
-        } 
+        } */
     }
 }
