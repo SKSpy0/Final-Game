@@ -1,3 +1,4 @@
+// Load.js is called between each level 
 class Load extends Phaser.Scene{
     constructor(){
         super("LoadScene");
