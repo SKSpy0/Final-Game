@@ -37,16 +37,19 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         }
     }
 
+    // Returns true if player is moving
     isMoving(){
         return this.moving;
     }
+    // Sets true when player is holding bottle
     pickedUpBottle() {
         this.holdingBottle = true;
     }
+    // Returns true if player is holding bottle
     hasBottle() {
         return this.holdingBottle;
     }
-
+    // Sets false when player throws bottle
     thrownBottle() {
         this.holdingBottle = false;
     }

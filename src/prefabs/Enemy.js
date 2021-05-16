@@ -16,6 +16,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         // Enemy velocity
         this.enemyVelocity = 100;
         
+        // If Enemy is set to roaming, set velocity for that enemy according to where it's facing
         if(isRoaming){
             switch(facing){
                 case 1:
@@ -33,7 +34,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-
+    // Turns around the Enemy when collided with a wall
     turnAround(){
         switch(this.facing){
             case 1:
