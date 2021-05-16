@@ -8,7 +8,7 @@ class Load extends Phaser.Scene{
     }
 
     create() {
-        this.title = this.add.bitmapText(centerWidth, centerHeight/2, 'customFont', 'Loading...', 60).setOrigin(0.5);
+        this.title = this.add.bitmapText(centerWidth, centerHeight, 'customFont', 'Loading...', 60).setOrigin(0.5);
         this.time.delayedCall(1000, () => {
             this.cameras.main.fadeOut(1000, 0, 0, 0);
 		})
