@@ -1,27 +1,61 @@
 class Enemy extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, isRoaming){
+    constructor(scene, x, y, texture, isRoaming, facing){
         super(scene, x, y, texture);
 
         // Adds to scene and physics system
         scene.physics.add.existing(this);
         scene.add.existing(this);
 
-        // Check if enemy sees player
-        this.detectedPlayer = false;
-
         // If this enemy is a roamer or not
         this.isRoaming = isRoaming;
 
+        // Direction of enemy
+        this.facing = facing;
+
+
         // Enemy velocity
         this.enemyVelocity = 100;
+        
+        if(isRoaming){
+            switch(facing){
+                case 1:
+                    this.setVelocityY(-this.enemyVelocity);
+                    break;
+                case 2:
+                    this.setVelocityY(this.enemyVelocity);
+                    break;
+                case 3:
+                    this.setVelocityX(-this.enemyVelocity);
+                    break;
+                case 4:
+                    this.setVelocityX(this.enemyVelocity);
+            }
+        }
     }
 
-    create(){
-    }
 
-    update(){
-        if(this.isRoaming){
-            
+    turnAround(){
+        switch(this.facing){
+            case 1:
+                this.setVelocityY(this.enemyVelocity);
+                this.facing = 2;
+                this.angle = 180;
+                break;
+            case 2:
+                this.setVelocityY(-this.enemyVelocity);
+                this.facing = 1;
+                this.angle = 0;
+                break;
+            case 3:
+                this.setVelocityX(this.enemyVelocity);
+                this.facing = 4;
+                this.angle = 90;
+                break;
+            case 4:
+                this.setVelocityX(-this.enemyVelocity);
+                this.facing = 3;
+                this.angle = -90;
+                break;
         }
     }
 }
