@@ -65,7 +65,7 @@ class Play extends Phaser.Scene{
 
         // Add player
         this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
-        this.player.setCollideWorldBounds(true);
+        //this.player.setCollideWorldBounds(true);
         this.player.depth = 1;
 
         // Setup each level
@@ -112,6 +112,13 @@ class Play extends Phaser.Scene{
         this.newBottle(200, 350);
         this.spawnEnemy(460, 150, false, 2);
         this.spawnEnemy(405, 150, false, 2);
+        // Boundary walls
+        this.newWall(0, 0, 540, 4);
+        this.newWall(0, 536, 540, 4);
+        this.newWall(0, 0, 4, 540);
+        this.newWall(536, 0, 4, 540);
+
+        // Level Layout walls
         this.newWall(0, 427, 373, 113);
         this.newWall(486, 128, 60, 412);
         this.newWall(378, 340, 110, 30);
@@ -137,6 +144,14 @@ class Play extends Phaser.Scene{
         this.newBottle(60, 500);
         this.newBottle(400, 490);
         this.newBottle(415, 325);
+
+        // Boundary walls
+        this.newWall(0, 0, 540, 4);
+        this.newWall(0, 536, 540, 4);
+        this.newWall(0, 0, 4, 540);
+        this.newWall(536, 0, 4, 540);
+
+        // Level layout walls
         this.newWall(0, 389, 159, 53);
         this.newWall(215, 389, 53, 53);
         this.newWall(344, 277, 105, 15);
