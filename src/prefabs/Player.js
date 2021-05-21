@@ -11,15 +11,18 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         this.playerVelocity = 150;
 
         this.holdingBottle = false;
+
     }
 
     update() {
         // Player movement
         if(keyA.isDown) {
             this.body.setVelocityX(-this.playerVelocity);
+            this.setAngle(-90);
             this.moving = true;
         } else if (keyD.isDown) {
             this.body.setVelocityX(this.playerVelocity);
+            this.setAngle(90);
             this.moving = true;
         } else {
             this.body.setVelocityX(0);
@@ -27,14 +30,31 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         }
         if (keyW.isDown) {
             this.body.setVelocityY(-this.playerVelocity);
+            this.setAngle(0);
             this.moving = true;
         } else if (keyS.isDown) {
             this.body.setVelocityY(this.playerVelocity);
+            this.setAngle(180);
             this.moving = true;
         } else {
             this.body.setVelocityY(0);
             this.moving = false;
         }
+
+        // Diagonal Movement Check
+        if(keyW.isDown && keyD.isDown) {
+            this.setAngle(45);
+        }
+        if(keyW.isDown && keyA.isDown) {
+            this.setAngle(-45);
+        }
+        if(keyD.isDown && keyS.isDown) {
+            this.setAngle(135);
+        }
+        if(keyA.isDown && keyS.isDown) {
+            this.setAngle(-135);
+        }
+
     }
 
     // Returns true if player is moving
