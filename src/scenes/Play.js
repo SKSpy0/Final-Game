@@ -17,9 +17,16 @@ class Play extends Phaser.Scene{
         this.load.audio('bottleBreak', './assets/glassBottleBreak.mp3');
         this.load.audio('throw', './assets/throw.mp3');
         this.load.audio('footstep', './assets/footStep1.mp3');
+
+        this.load.image("tiles", "./assets/Vignette Escape TileSet.png");    // tile sheet
+        this.load.tilemapTiledJSON("map", "./assets/Level2.json");
     }
 
     create() {
+        const map = this.add.tilemap("map"); 
+        const tileset = map.addTilesetImage("FinalGame", "tiles");
+
+
         // Variables for player being caught and if game over has been initiated
         this.playerCaught = false;
         this.gameOver = false;
@@ -55,7 +62,6 @@ class Play extends Phaser.Scene{
 
         // Enables lights and sets ambient color
         this.lights.enable().setAmbientColor(0x000000);
-        this.lights.enable();
         this.radiuslight = 10;
         
         // Create bottle, wall, and enemy group
@@ -77,11 +83,16 @@ class Play extends Phaser.Scene{
                 this.levelOneSetup();
                 break;
             case 2:
-                this.background = this.add.image(0, 0, 'map2').setOrigin(0);
+                //this.background = this.add.image(0, 0, 'map2').setOrigin(0);
+                const bgLayer = map.createLayer("background", tileset, 0, 0);
+                const wallLayer = map.createLayer("walls", tileset, 0, 0);
+                wallLayer.setCollisionByProperty({ collides: true });
                 this.levelTwoSetup();
+                wallLayer.setCollisionByExclusion(-1,true);
+                this.physics.add.collider(this.player, wallLayer);
                 break;
         }
-        this.background.setPipeline('Light2D');
+        //this.background.setPipeline('Light2D');
 
         // Create lights (light1 for player footsteps, light2 for bottle, light3 for enemy footsteps)
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
@@ -173,7 +184,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(232, 360, true, 3);
         this.spawnEnemy(320, 255, false, 4);
         this.spawnEnemy(320, 210, false, 4);
-
+        /*
         // Boundary walls
         this.newWall(0, 0, 540, 4);
         this.newWall(0, 536, 540, 4);
@@ -191,7 +202,7 @@ class Play extends Phaser.Scene{
         this.newWall(350, 427, 97, 15);
         this.newWall(0, 162, 12, 15);
         this.newWall(115, 162, 235, 15);
-
+        */
         // Spawn Exit
         var exit = new Wall(this, 205, 15, 'footprint', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
