@@ -21,6 +21,7 @@ class Play extends Phaser.Scene{
         // loading tilemaps
         this.load.image('tiles', './assets/VignetteEscapeTileSet.png');
         this.load.tilemapTiledJSON('level1', './assets/Level1.json');
+        this.load.tilemapTiledJSON('level2', './assets/Level2.json');
     }
 
     create() {
@@ -79,7 +80,11 @@ class Play extends Phaser.Scene{
                 this.levelOneSetup();
                 break;
             case 2:
-                this.background = this.add.image(0, 0, 'map2').setOrigin(0);
+                this.map = this.add.tilemap('level2');
+                this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
+                this.backgroundLayer = this.map.createLayer("background", this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer = this.map.createLayer("walls", this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer.setCollisionByExclusion(-1, true);
                 this.levelTwoSetup();
                 break;
         }
