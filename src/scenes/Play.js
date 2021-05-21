@@ -136,8 +136,8 @@ class Play extends Phaser.Scene{
         this.newBottle(60, 276);
         this.newBottle(60, 126);
         this.newBottle(280, 64);
-        this.spawnEnemy(460, 150, false, 2);
-        this.spawnEnemy(405, 150, false, 2);
+        this.spawnEnemy(485, 150, false, 2);
+        this.spawnEnemy(443, 150, false, 2);
 
         // Spawn Exit
         var exit = new Wall(this, 500, 35, 'footprint', 30,30).setOrigin(0,0);
@@ -248,7 +248,7 @@ class Play extends Phaser.Scene{
     // (facing: up = 1, down = 2, left = 3, right = 4)
     spawnEnemy(PosX, PosY, roaming, facing){
         let enemy = new Enemy(this, PosX, PosY, 'enemy', roaming, facing);
-        enemy.setScale(0.7);
+        enemy.setScale(0.6);
         enemy.setPipeline('Light2D')
         switch(facing){
             case 1:
@@ -272,7 +272,7 @@ class Play extends Phaser.Scene{
         
         // enemy turn around if collided with a wall
         if(roaming){
-            this.physics.add.overlap(enemy, this.wallGroup, (enemy) => {
+            this.physics.add.collider(enemy, this.wallLayer, (enemy) => {
                 enemy.turnAround();
             })
         }
