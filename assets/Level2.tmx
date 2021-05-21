@@ -3,10 +3,10 @@
  <editorsettings>
   <export target="Level2.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" name="FinalGame" tilewidth="30" tileheight="30" tilecount="324" columns="18">
-  <image source="Vignette Escape TileSet.png" trans="ff00ff" width="540" height="540"/>
+ <tileset firstgid="1" name="VignetteEscapeTileSet" tilewidth="30" tileheight="30" tilecount="324" columns="18">
+  <image source="VignetteEscapeTileSet.png" trans="ff00ff" width="540" height="540"/>
  </tileset>
- <layer id="1" name="background" width="18" height="18">
+ <layer id="1" name="Background" width="18" height="18">
   <data encoding="csv">
 138,139,140,141,138,139,140,141,142,142,142,142,142,142,142,142,142,142,
 138,139,140,141,138,139,140,141,142,160,160,160,160,160,160,160,160,160,
@@ -28,7 +28,7 @@
 246,246,246,246,246,246,246,246,246,246,246,246,246,246,247,248,249,250
 </data>
  </layer>
- <layer id="2" name="walls" width="18" height="18">
+ <layer id="2" name="Walls" width="18" height="18">
   <properties>
    <property name="collides" type="bool" value="false"/>
   </properties>
