@@ -5,14 +5,11 @@ class Play extends Phaser.Scene{
 
     preload() {
         // Loading temporary assets
-        this.load.image('map1', './assets/Map01.png');
-        this.load.image('map2', './assets/Map02.png');
         this.load.image('player', './assets/PlayerA.png');
         this.load.image('enemy', './assets/EnemyA.png');
-        this.load.image('wave', './assets/wave2.png');
         this.load.image('bottle', './assets/bottle.png');
-        this.load.image('wall', './assets/wallTest.png');
         this.load.image('footprint', './assets/footPrint.png');
+
         this.load.audio('bottlePickup', './assets/glassBottlePickup.mp3');
         this.load.audio('bottleBreak', './assets/glassBottleBreak.mp3');
         this.load.audio('throw', './assets/throw.mp3');
