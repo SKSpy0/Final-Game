@@ -176,7 +176,6 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(320, 255, false, 4);
         this.spawnEnemy(320, 210, false, 4);
 
-
         // Spawn Exit
         var exit = new Wall(this, 205, 15, 'footprint', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
