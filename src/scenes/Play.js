@@ -83,8 +83,8 @@ class Play extends Phaser.Scene{
             case 2:
                 this.map = this.add.tilemap('level2');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
-                this.backgroundLayer = map.createLayer("background", tileset, 0, 0).setPipeline('Light2D');
-                this.wallLayer = map.createLayer("walls", tileset, 0, 0).setPipeline('Light2D');
+                this.backgroundLayer = this.map.createLayer("background", this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer = this.map.createLayer("walls", this.tileset, 0, 0).setPipeline('Light2D');
                 this.wallLayer.setCollisionByExclusion(-1, true);
                 this.levelTwoSetup();
                 break;
