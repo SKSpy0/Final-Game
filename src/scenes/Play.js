@@ -60,7 +60,6 @@ class Play extends Phaser.Scene{
         
         // Create bottle, wall, and enemy group
         this.bottleGroup = this.add.group();
-        this.wallGroup = this.add.group();
         this.enemyGroup = this.add.group({
             runChildUpdate: true
         });
@@ -126,7 +125,7 @@ class Play extends Phaser.Scene{
         // Sets overlap between bottle and walls
         for (var i = 0; i < this.bottleGroup.getLength(); i++) {
             var update = this.bottleGroup.getChildren()[i];
-            this.physics.add.overlap(update, this.wallGroup, (update, wallGroup) => {
+            this.physics.add.collider(update, this.wallLayer, (update, wallLayer) => {
                 update.hitWall();
             });
         }
@@ -176,7 +175,8 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(232, 360, true, 3);
         this.spawnEnemy(320, 255, false, 4);
         this.spawnEnemy(320, 210, false, 4);
-        
+
+
         // Spawn Exit
         var exit = new Wall(this, 205, 15, 'footprint', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
@@ -192,13 +192,6 @@ class Play extends Phaser.Scene{
                 })
         });
         //this.wallGroup.add(exit);
-    }
-
-    // Creates new wall in level
-    newWall(x, y, width, height) {
-        var wall = new Wall(this, x, y, 'wall', width, height).setOrigin(0,0);
-        this.physics.add.collider(this.player, wall);
-        this.wallGroup.add(wall);
     }
 
     // Creates New Bottles at set location (x, y)
