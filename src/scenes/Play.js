@@ -59,7 +59,6 @@ class Play extends Phaser.Scene{
         
         // Create bottle, wall, and enemy group
         this.bottleGroup = this.add.group();
-        this.wallGroup = this.add.group();
         this.enemyGroup = this.add.group({
             runChildUpdate: true
         });
@@ -121,7 +120,7 @@ class Play extends Phaser.Scene{
         // Sets overlap between bottle and walls
         for (var i = 0; i < this.bottleGroup.getLength(); i++) {
             var update = this.bottleGroup.getChildren()[i];
-            this.physics.add.overlap(update, this.wallGroup, (update, wallGroup) => {
+            this.physics.add.collider(update, this.wallLayer, (update, wallLayer) => {
                 update.hitWall();
             });
         }
@@ -172,23 +171,6 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(320, 255, false, 4);
         this.spawnEnemy(320, 210, false, 4);
 
-        // Boundary walls
-        this.newWall(0, 0, 540, 4);
-        this.newWall(0, 536, 540, 4);
-        this.newWall(0, 0, 4, 540);
-        this.newWall(536, 0, 4, 540);
-
-        // Level layout walls
-        this.newWall(0, 389, 159, 53);
-        this.newWall(215, 389, 53, 53);
-        this.newWall(344, 277, 105, 15);
-        this.newWall(260, 0, 90, 159);
-        this.newWall(527, 273, 14, 265);
-        this.newWall(0, 530, 540, 10);
-        this.newWall(350, 360, 15, 82);
-        this.newWall(350, 427, 97, 15);
-        this.newWall(0, 162, 12, 15);
-        this.newWall(115, 162, 235, 15);
 
         // Spawn Exit
         var exit = new Wall(this, 205, 15, 'footprint', 30,30).setOrigin(0,0);
@@ -205,13 +187,6 @@ class Play extends Phaser.Scene{
                 })
         });
         //this.wallGroup.add(exit);
-    }
-
-    // Creates new wall in level
-    newWall(x, y, width, height) {
-        var wall = new Wall(this, x, y, 'wall', width, height).setOrigin(0,0);
-        this.physics.add.collider(this.player, wall);
-        this.wallGroup.add(wall);
     }
 
     // Creates New Bottles at set location (x, y)
