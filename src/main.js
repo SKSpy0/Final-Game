@@ -8,6 +8,7 @@ let config = {
         default: 'arcade',
         arcade: {
             debug: false,
+            tileBias: 30,
         }
     },
 }
