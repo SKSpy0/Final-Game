@@ -18,15 +18,13 @@ class Play extends Phaser.Scene{
         this.load.audio('throw', './assets/throw.mp3');
         this.load.audio('footstep', './assets/footStep1.mp3');
 
-        this.load.image("tiles", "./assets/Vignette Escape TileSet.png");    // tile sheet
-        this.load.tilemapTiledJSON("map", "./assets/Level2.json");
+        // loading tilemaps
+        this.load.image('tiles', './assets/VignetteEscapeTileSet.png');
+        this.load.tilemapTiledJSON('level1', './assets/Level1.json');
+        this.load.tilemapTiledJSON('level2', './assets/Level2.json');
     }
 
     create() {
-        const map = this.add.tilemap("map"); 
-        const tileset = map.addTilesetImage("FinalGame", "tiles");
-
-
         // Variables for player being caught and if game over has been initiated
         this.playerCaught = false;
         this.gameOver = false;
@@ -59,10 +57,6 @@ class Play extends Phaser.Scene{
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         pointer = this.input.activePointer;
-
-        // Enables lights and sets ambient color
-        this.lights.enable().setAmbientColor(0x000000);
-        this.radiuslight = 10;
         
         // Create bottle, wall, and enemy group
         this.bottleGroup = this.add.group();
@@ -73,28 +67,38 @@ class Play extends Phaser.Scene{
 
         // Add player
         this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
-        //this.player.setCollideWorldBounds(true);
+        this.player.setCollideWorldBounds(true);
         this.player.depth = 1;
-
+        
         // Setup each level
         switch(level){
             case 1:
-                this.background = this.add.image(0, 0, 'map1').setOrigin(0);
+                this.map = this.add.tilemap('level1');
+                this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
+                this.backgroundLayer = this.map.createLayer('Background', this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer = this.map.createLayer('Walls', this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer.setCollisionByExclusion(-1, true);
                 this.levelOneSetup();
                 break;
             case 2:
-                //this.background = this.add.image(0, 0, 'map2').setOrigin(0);
-                const bgLayer = map.createLayer("background", tileset, 0, 0);
-                const wallLayer = map.createLayer("walls", tileset, 0, 0);
-                wallLayer.setCollisionByProperty({ collides: true });
+                this.map = this.add.tilemap('level2');
+                this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
+                this.backgroundLayer = map.createLayer("background", tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer = map.createLayer("walls", tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer.setCollisionByExclusion(-1, true);
                 this.levelTwoSetup();
-                wallLayer.setCollisionByExclusion(-1,true);
-                this.physics.add.collider(this.player, wallLayer);
                 break;
         }
-        //this.background.setPipeline('Light2D');
 
-        // Create lights (light1 for player footsteps, light2 for bottle, light3 for enemy footsteps)
+        // Set Collision between wall and player
+        this.physics.add.collider(this.player, this.wallLayer);
+
+        // Enables lights and sets ambient color
+        this.lights.enable().setAmbientColor(0x000000);
+
+        // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for enemy footsteps)
+        this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(2);
+
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(3);
         this.light1New = false;
         this.light1Radius = 0;
@@ -113,7 +117,7 @@ class Play extends Phaser.Scene{
 
         // Will create a new footstep sound wave every 2 seconds
         this.waveSpawnTimer = this.time.addEvent({
-            delay: 1000,
+            delay: 1400,
             callback: this.createFootstep,
             callbackScope: this,
             loop: true,
@@ -131,6 +135,8 @@ class Play extends Phaser.Scene{
     // Setup for Level One
     levelOneSetup() {
         // Spawn Player, Bottles, and Enemies in the level
+        this.player.x = 450;
+        this.player.y = 510;
         this.newBottle(430, 460);
         this.newBottle(200, 350);
         this.newBottle(60, 276);
@@ -138,20 +144,6 @@ class Play extends Phaser.Scene{
         this.newBottle(280, 64);
         this.spawnEnemy(460, 150, false, 2);
         this.spawnEnemy(405, 150, false, 2);
-
-        // Boundary walls
-        this.newWall(0, 0, 540, 4);
-        this.newWall(0, 536, 540, 4);
-        this.newWall(0, 0, 4, 540);
-        this.newWall(536, 0, 4, 540);
-
-        // Level Layout walls
-        this.newWall(0, 427, 373, 113);
-        this.newWall(486, 128, 60, 412);
-        this.newWall(378, 340, 110, 30);
-        this.newWall(109, 125, 270, 170);
-        this.newWall(0, 0, 14, 540);
-        this.newWall(0, 0, 540, 10);
 
         // Spawn Exit
         var exit = new Wall(this, 500, 35, 'footprint', 30,30).setOrigin(0,0);
@@ -184,25 +176,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(232, 360, true, 3);
         this.spawnEnemy(320, 255, false, 4);
         this.spawnEnemy(320, 210, false, 4);
-        /*
-        // Boundary walls
-        this.newWall(0, 0, 540, 4);
-        this.newWall(0, 536, 540, 4);
-        this.newWall(0, 0, 4, 540);
-        this.newWall(536, 0, 4, 540);
-
-        // Level layout walls
-        this.newWall(0, 389, 159, 53);
-        this.newWall(215, 389, 53, 53);
-        this.newWall(344, 277, 105, 15);
-        this.newWall(260, 0, 90, 159);
-        this.newWall(527, 273, 14, 265);
-        this.newWall(0, 530, 540, 10);
-        this.newWall(350, 360, 15, 82);
-        this.newWall(350, 427, 97, 15);
-        this.newWall(0, 162, 12, 15);
-        this.newWall(115, 162, 235, 15);
-        */
+        
         // Spawn Exit
         var exit = new Wall(this, 205, 15, 'footprint', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
@@ -252,7 +226,7 @@ class Play extends Phaser.Scene{
         this.light1Radius = 0;
         this.light1.setPosition(this.player.x, this.player.y);
         this.time.addEvent({
-            delay: 500,
+            delay: 700,
             callback: () => {
                 this.light1New = false;
             }
@@ -355,6 +329,10 @@ class Play extends Phaser.Scene{
                 }
             }
         }
+
+        // Keep Light0 on player
+        this.light0.x = this.player.x;
+        this.light0.y = this.player.y;
 
         // Wave effect for Lights
         if(this.light1New){
