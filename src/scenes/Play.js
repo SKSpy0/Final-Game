@@ -75,6 +75,7 @@ class Play extends Phaser.Scene{
         // Setup each level
         switch(level){
             case 1:
+                this.player.setCollideWorldBounds(true);
                 this.map = this.add.tilemap('level1');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
                 this.backgroundLayer = this.map.createLayer('Background', this.tileset, 0, 0).setPipeline('Light2D');
@@ -83,6 +84,7 @@ class Play extends Phaser.Scene{
                 this.levelOneSetup();
                 break;
             case 2:
+                this.player.setCollideWorldBounds(true);
                 this.map = this.add.tilemap('level2');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
                 this.backgroundLayer = this.map.createLayer("Background", this.tileset, 0, 0).setPipeline('Light2D');
@@ -493,9 +495,9 @@ class Play extends Phaser.Scene{
             }
         }
     
-        if(keySPACE.isDown){
+        /*if(keySPACE.isDown){
             console.log(this.player.x);
             console.log(this.player.y);
-        } 
+        } */
     }
 }
