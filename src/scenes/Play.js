@@ -307,7 +307,7 @@ class Play extends Phaser.Scene{
                 door.openCloseDoor();
                 // If the door is closed, add the collider else the door is open - remove the collider
                 if(door.isOpen() == false) {
-                    this.physics.add.collider(this.player, door);
+                    collider = this.physics.add.collider(this.player, door);
                 } else {
                     this.physics.world.removeCollider(collider);
                 }
