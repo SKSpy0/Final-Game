@@ -87,9 +87,9 @@ class Play extends Phaser.Scene{
                 break;
             case 3:
                 // setup following camera
-                this.cameras.main.setBounds(-540, 0, 1080, 1080);
+                this.cameras.main.setBounds(0, 0, 1080, 1080);
                 this.cameras.main.startFollow(this.player);
-                this.cameras.main.setLerp(0,1, 0,1);
+                this.cameras.main.setLerp(0.1, 0.1);
 
                 this.map = this.add.tilemap('level3');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
