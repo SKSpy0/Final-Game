@@ -8,6 +8,7 @@ class Play extends Phaser.Scene{
         this.load.image('player', './assets/PlayerA.png');
         this.load.image('enemy', './assets/EnemyA.png');
         this.load.image('bottle', './assets/bottle.png');
+        this.load.image('crackedBottle', './assets/bottleCrak.png');
         this.load.image('footprint', './assets/footPrint.png');
 
         this.load.audio('bottlePickup', './assets/glassBottlePickup.mp3');
@@ -313,6 +314,8 @@ class Play extends Phaser.Scene{
             // checks if bottle has landed
             if(update.landedCheck()){
                 console.log('bottle landed');
+                // Add cracked bottle where the bottle lands
+                this.add.image(update.bottleX(), update.bottleY(), 'crackedBottle');
                 if(!this.light2New){
                     this.createBottleWave(update);
                 }
