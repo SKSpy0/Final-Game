@@ -33,7 +33,7 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
     }
 
 
-    update(playerX, playerY) {
+    update(playerX, playerY, cameraX, cameraY) {
         // The player is holding the bottle
         if (this.pickedUpBottle == true && this.throwing == false) {
             this.x = playerX;
@@ -42,11 +42,11 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
             // Throw bottle
             if (pointer.isDown && this.delayActive == false) {
                 this.throwing = true;
-                this.travelToX = pointer.x;
-                this.travelToY = pointer.y;
-                this.scene.physics.moveTo(this, pointer.x, pointer.y, this.throwSpeed);
-                console.log("pointer x:" + pointer.x);
-                console.log("pointer y:" + pointer.y);
+                this.travelToX = pointer.worldX;
+                this.travelToY = pointer.worldY;
+                this.scene.physics.moveTo(this, this.travelToX, this.travelToY, this.throwSpeed);
+                console.log("pointer x:" + this.travelToX);
+                console.log("pointer y:" + this.travelToY);
                 console.log("player x:" + playerX);
                 console.log("player y:" + playerY);
             }
