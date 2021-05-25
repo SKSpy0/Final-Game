@@ -11,6 +11,9 @@ class Play extends Phaser.Scene{
         this.load.image('crackedBottle', './assets/bottleCrak.png');
         this.load.image('footprint', './assets/footPrint.png');
 
+        this.load.image('lever', './assets/tempLever.png');
+        this.load.image('door', './assets/tempDoor.png');
+
         this.load.audio('bottlePickup', './assets/glassBottlePickup.mp3');
         this.load.audio('bottleBreak', './assets/glassBottleBreak.mp3');
         this.load.audio('throw', './assets/throw.mp3');
@@ -55,6 +58,7 @@ class Play extends Phaser.Scene{
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         pointer = this.input.activePointer;
         
@@ -210,6 +214,7 @@ class Play extends Phaser.Scene{
     levelThreeSetup(){
         this.player.x = 105;
         this.player.y = 1025;
+        this.newLeverAndDoor(270, 515, 278, 465, 4);
     }
 
     // Creates New Bottles at set location (x, y)
@@ -264,6 +269,50 @@ class Play extends Phaser.Scene{
             })
         }
         this.enemyGroup.add(enemy);
+    }
+
+    // Creates a door and a lever that open/closes that door
+    // (facing: up = 1, down = 2, left = 3, right = 4)
+    newLeverAndDoor(leverX, leverY, doorX, doorY, facing) {
+        var door = new Door(this, doorX, doorY, 'door');
+        var lever = new Lever(this, leverX, leverY, 'lever');
+        door.setPipeline('Light2D')
+        lever.setPipeline('Light2D')
+        switch(facing){
+            case 1:
+                break;
+            case 2:
+                door.angle = 180;
+                lever.angle = 180;
+                break;
+            case 3:
+                door.angle = -90;
+                door.rotateHitbox();
+                lever.angle = -90;
+                lever.rotateHitbox();
+                break;
+            case 4:
+                door.angle = 90;
+                door.rotateHitbox();
+                lever.angle = 90;
+                lever.rotateHitbox();
+                break;
+        }
+        var collider = this.physics.add.collider(this.player, door);
+        this.physics.add.overlap(this.player, lever, () => {
+            if(keyE.isDown && lever.isPlayerUsing() == false) {
+                // Play lever animation with a delay on the next time you can use the lever 
+                lever.useLever(this.time);
+                // Play door animation and set the door state
+                door.openCloseDoor();
+                // If the door is closed, add the collider else the door is open - remove the collider
+                if(door.isOpen() == false) {
+                    this.physics.add.collider(this.player, door);
+                } else {
+                    this.physics.world.removeCollider(collider);
+                }
+            }
+        });
     }
 
     //generates player footsteps

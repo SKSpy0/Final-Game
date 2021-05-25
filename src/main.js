@@ -14,7 +14,7 @@ let config = {
 }
 let game = new Phaser.Game(config);
 let cursors;
-let keyW, keyA, keyS, keyD, keySPACE, pointer;
+let keyW, keyA, keyS, keyD, keySPACE, pointer, keyE;
 let level;
 let centerHeight = game.config.height/2;
 let centerWidth = game.config.width/2;
