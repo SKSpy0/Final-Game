@@ -59,4 +59,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
                 break;
         }
     }
+
+    // Returns if enemy is a roamer or not
+    checkRoaming(){
+        return this.isRoaming;
+    }
 }
