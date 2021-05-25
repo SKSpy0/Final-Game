@@ -85,7 +85,7 @@ class Menu extends Phaser.Scene{
     
     create() {
         // Add Menu text
-        this.title = this.add.bitmapText(centerWidth, centerHeight/2, 'customFont', 'Final Game', 60).setOrigin(0.5);
+        this.title = this.add.bitmapText(centerWidth, centerHeight/2, 'customFont', 'Vignette Escape', 60).setOrigin(0.5);
         this.start = this.add.bitmapText(centerWidth, centerHeight-25, 'customFont', 'START', 28).setOrigin(0.5);
         this.settings = this.add.bitmapText(centerWidth, centerHeight+25, 'customFont', 'SETTINGS', 28).setOrigin(0.5);
         this.controls = this.add.bitmapText(centerWidth, centerHeight+75, 'customFont', 'CONTROLS', 28).setOrigin(0.5);

@@ -104,4 +104,11 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
         console.log("destroy");
         this.collidedWithWall = true;
     }
+
+    bottleX() {
+        return this.x;
+    }
+    bottleY() {
+        return this.y;
+    }
 }
