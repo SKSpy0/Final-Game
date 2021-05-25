@@ -112,7 +112,7 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.player, this.wallLayer);
 
         // Enables lights and sets ambient color
-        this.lights.enable().setAmbientColor(0x333333);
+        this.lights.enable().setAmbientColor(0x000000);
 
         // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for enemy footsteps)
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
@@ -191,8 +191,8 @@ class Play extends Phaser.Scene{
         this.newBottle(500, 55);
         this.newBottle(450, 55);
         this.newBottle(400, 55);
-        this.spawnEnemy(40, 165, true, 2, 3);
-        this.spawnEnemy(232, 330, true, 3, 4);
+        this.spawnEnemy(40, 165, true, 2);
+        this.spawnEnemy(232, 330, true, 3);
         this.spawnEnemy(315, 175, false, 4);
         this.spawnEnemy(315, 215, false, 4);
 
@@ -214,6 +214,59 @@ class Play extends Phaser.Scene{
     levelThreeSetup(){
         this.player.x = 105;
         this.player.y = 1025;
+        this.newBottle(160, 915);
+        this.newBottle(160, 940);
+        this.newBottle(160, 765);
+        this.newBottle(160, 315);
+        this.newBottle(160, 75);
+        this.newBottle(255, 1035);
+        this.newBottle(435, 975);
+        this.newBottle(735, 855);
+        this.newBottle(795, 855);
+        this.newBottle(860, 855);
+        this.newBottle(255, 155);
+        this.newBottle(255, 255);
+        this.newBottle(255, 285);
+        this.newBottle(455, 225);
+        this.newBottle(500, 225);
+        this.newBottle(615, 225);
+        this.newBottle(675, 225);
+        this.newBottle(465, 435);
+        this.newBottle(585, 645);
+        this.newBottle(855, 735);
+        this.newBottle(855, 525);
+        this.newBottle(800, 525);
+        this.newBottle(800, 465);
+        this.newBottle(915, 225);
+        this.newBottle(975, 975);
+        this.newBottle(1035, 490);
+        this.newBottle(1035, 315);
+        this.spawnEnemy(205, 700, true, 1);
+        this.spawnEnemy(240, 385, true, 2);
+        this.spawnEnemy(360, 335, true, 2);
+        this.spawnEnemy(385, 750, true, 4);
+        this.spawnEnemy(465, 645, true, 1);
+        this.spawnEnemy(585, 435, true, 2);
+        this.spawnEnemy(645, 120, true, 3);
+        this.spawnEnemy(780, 315, true, 2);
+        this.spawnEnemy(960, 375, true, 1);
+        this.spawnEnemy(800, 735, false, 3);
+        this.spawnEnemy(680, 955, true, 4);
+
+        // Spawn Exit
+        var exit = new Wall(this, 1030, 108, 'footprint', 30,30).setOrigin(0,0);
+        exit.setAlpha(1);
+        // Setup Collision between Exit and Player
+        var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
+                console.log("Level Complete");
+                this.physics.world.removeCollider(collider);
+                this.cameras.main.fadeOut(500, 0, 0, 0);
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                    //level++;
+                    //this.scene.start('LoadScene');
+                    this.scene.start('MenuScene');
+                })
+        });
         this.newLeverAndDoor(270, 515, 278, 465, 4);
     }
 
