@@ -33,7 +33,7 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
     }
 
 
-    update(playerX, playerY, cameraX, cameraY) {
+    update(playerX, playerY) {
         // The player is holding the bottle
         if (this.pickedUpBottle == true && this.throwing == false) {
             this.x = playerX;
