@@ -55,6 +55,7 @@ class Play extends Phaser.Scene{
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         pointer = this.input.activePointer;
         
         // Create bottle, wall, and enemy group
@@ -207,8 +208,8 @@ class Play extends Phaser.Scene{
     }
 
     levelThreeSetup(){
-        this.player.x = 20;
-        this.player.y = 20;
+        this.player.x = 105;
+        this.player.y = 1025;
     }
 
     // Creates New Bottles at set location (x, y)
@@ -390,9 +391,9 @@ class Play extends Phaser.Scene{
             }
         }
     
-        /*if(this.player.isMoving()){
+        if(keySPACE.isDown){
             console.log(this.player.x);
             console.log(this.player.y);
-        } */
+        } 
     }
 }
