@@ -65,7 +65,6 @@ class Play extends Phaser.Scene{
 
         // Add player
         this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
-        this.player.setCollideWorldBounds(true);
         this.player.depth = 1;
         
         // Setup each level
@@ -87,6 +86,11 @@ class Play extends Phaser.Scene{
                 this.levelTwoSetup();
                 break;
             case 3:
+                // setup following camera
+                this.cameras.main.setBounds(-540, 0, 1080, 1080);
+                this.cameras.main.startFollow(this.player);
+                this.cameras.main.setLerp(0,1, 0,1);
+
                 this.map = this.add.tilemap('level3');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
                 this.backgroundLayer = this.map.createLayer('Background', this.tileset, 0, 0).setPipeline('Light2D');
@@ -103,7 +107,7 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.player, this.wallLayer);
 
         // Enables lights and sets ambient color
-        this.lights.enable().setAmbientColor(0x000000);
+        this.lights.enable().setAmbientColor(0x333333);
 
         // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for enemy footsteps)
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
