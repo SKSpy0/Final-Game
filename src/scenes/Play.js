@@ -179,7 +179,6 @@ class Play extends Phaser.Scene{
                     this.scene.start('LoadScene');
                 })
         });
-        //this.wallGroup.add(exit);
     }
 
     // Setup for Level Two
@@ -319,7 +318,41 @@ class Play extends Phaser.Scene{
         
         // enemy turn around if collided with a wall
         if(roaming){
+            // setup enemy footprints and adjust orientation to match direction the enemy is facing
+            let footprints = this.add.sprite(enemy.returnX(), enemy.returnY(), 'footprint');
+            this.footprintsNew = false;
+            switch(facing){
+                case 1:
+                    footprints.angle = 0;
+                    break;
+                case 2:
+                    footprints.angle = 180;
+                    break;
+                case 3:
+                    footprints.angle = -90;
+                    break;
+                case 4:
+                    footprints.angle =  90;
+                    break;
+            }
+            this.tweens.add ({
+                targets: footprints,
+                alpha: 0,
+                duration: 1400,
+                repeat: -1,
+            });
+            // looped event which will update the enemy footprint
+            this.time.addEvent({
+                delay: 1400,
+                callback: this.createEnemyFootstep,
+                args: [footprints, enemy],
+                callbackScope: this,
+                loop: true,
+            });
+
+            // collision between wall and enemy
             this.physics.add.collider(enemy, this.wallLayer, (enemy) => {
+                // turn around enemy and fix orientation of footprints accordingly
                 enemy.turnAround();
             })
         }
@@ -362,9 +395,9 @@ class Play extends Phaser.Scene{
                 door.openCloseDoor();
                 // If the door is closed, add the collider else the door is open - remove the collider
                 if(door.isOpen() == false) {
-                    collider = this.physics.add.collider(this.player, door);
+                    collider.active = true;
                 } else {
-                    this.physics.world.removeCollider(collider);
+                    collider.active = false;
                 }
             }
         });
@@ -402,16 +435,24 @@ class Play extends Phaser.Scene{
     }
 
     // generates enemy footsteps
-    createEnemyFootstep(enemy){ 
-        this.light3New = true;
-        this.light3Radius = 0;
-        this.light3.setPosition(enemy.x, enemy.y);
-        this.time.addEvent({
-            delay: 250,
-            callback: () => {
-                this.light3New = false;
-            }
-        })
+    createEnemyFootstep(footprints, enemy){
+        footprints.x = enemy.returnX();
+        footprints.y = enemy.returnY(); 
+        switch(enemy.checkFacing()){
+            case 1:
+                footprints.angle = 0;
+                break;
+            case 2:
+                footprints.angle = 180;
+                break;
+            case 3:
+                footprints.angle = -90;
+                break;
+            case 4:
+                footprints.angle =  90;
+                break;
+        }
+        this.footprintsNew = true;
     }
 
     update() {
@@ -483,18 +524,6 @@ class Play extends Phaser.Scene{
             }
         }
 
-        // Wave effect for Enemy Lights
-        if(this.light3New){
-            this.light3Radius += 1.8
-            this.light3.setRadius(this.light3Radius);
-        } else {
-            this.light3Radius -= 1.8
-            this.light3.setRadius(this.light3Radius);
-            if(this.light3Radius <= 0){
-                this.light3.setRadius(0);
-            }
-        }
-    
         /*if(keySPACE.isDown){
             console.log(this.player.x);
             console.log(this.player.y);

@@ -64,4 +64,18 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     checkRoaming(){
         return this.isRoaming;
     }
+
+    // Returns what direction enemy is facing
+    checkFacing(){
+        return this.facing;
+    }
+
+    // Returns X and Y position of enemy
+    returnX(){
+        return this.x;
+    }
+
+    returnY(){
+        return this.y;
+    }
 }
