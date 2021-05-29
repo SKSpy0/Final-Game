@@ -45,10 +45,6 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
                 this.travelToX = pointer.worldX;
                 this.travelToY = pointer.worldY;
                 this.scene.physics.moveTo(this, this.travelToX, this.travelToY, this.throwSpeed);
-                console.log("pointer x:" + this.travelToX);
-                console.log("pointer y:" + this.travelToY);
-                console.log("player x:" + playerX);
-                console.log("player y:" + playerY);
             }
         }
         // Once it reaches destination, destroy
@@ -64,7 +60,6 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
         }
         if ((this.throwing == true && this.distanceToX <= 5 && this.distanceToY <= 5) || this.collidedWithWall == true) {
             this.landed = true;
-            console.log("destroy");
             this.destroy();
         }
     }
@@ -99,9 +94,7 @@ class Bottle extends Phaser.Physics.Arcade.Sprite{
     }
 
     hitWall() {
-        console.log("hit wall");
         this.landed = true;
-        console.log("destroy");
         this.collidedWithWall = true;
     }
 

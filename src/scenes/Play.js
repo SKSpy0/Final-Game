@@ -264,7 +264,7 @@ class Play extends Phaser.Scene{
         exit.setAlpha(1);
         // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
-                console.log("Level Complete");
+                //console.log("Level Complete");
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
@@ -295,7 +295,7 @@ class Play extends Phaser.Scene{
         exit.setAlpha(1);
         // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
-                console.log("Level Complete");
+                //console.log("Level Complete");
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
@@ -353,7 +353,7 @@ class Play extends Phaser.Scene{
         exit.setAlpha(1);
         // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
-                console.log("Level Complete");
+                //console.log("Level Complete");
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
@@ -414,7 +414,7 @@ class Play extends Phaser.Scene{
         var exit = new Wall(this, 1020, 1020, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
-            console.log("Level Complete");
+            //console.log("Level Complete");
             this.physics.world.removeCollider(collider);
             this.cameras.main.fadeOut(500, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
@@ -480,7 +480,7 @@ class Play extends Phaser.Scene{
         var exit = new Wall(this, 2168, 282, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
-            console.log("Level Complete");
+            //console.log("Level Complete");
             this.physics.world.removeCollider(collider);
             this.cameras.main.fadeOut(500, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
@@ -514,7 +514,7 @@ class Play extends Phaser.Scene{
         var exit = new Wall(this, 78, 78, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
-            console.log("Level Complete");
+            //console.log("Level Complete");
             this.physics.world.removeCollider(collider);
             this.cameras.main.fadeOut(500, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
@@ -552,7 +552,7 @@ class Play extends Phaser.Scene{
                 this.bottlePickupSound.play();
                 this.player.pickedUpBottle();
                 bottle.pickedUp();
-                console.log("picked up bottle");
+                //console.log("picked up bottle");
                 this.physics.world.removeCollider(collider);
             }
         });
@@ -731,7 +731,7 @@ class Play extends Phaser.Scene{
             }
         })
         this.footStepSound.play();
-        console.log("footstep created");
+        //console.log("footstep created");
     }
 
     // generates bottle sound wave
@@ -747,7 +747,7 @@ class Play extends Phaser.Scene{
             }
         })
 
-        console.log("bottle wave created");
+        //console.log("bottle wave created");
     }
 
     // generates enemy footsteps
@@ -790,7 +790,7 @@ class Play extends Phaser.Scene{
         if(!this.gameOver && this.playerCaught){
             this.player.stopPlayer();
             this.cameras.main.shake(100, 0.0035);
-            console.log("death fade out")
+            //console.log("death fade out")
             this.gameOver = true;
             this.cameras.main.fadeOut(500, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
@@ -823,7 +823,7 @@ class Play extends Phaser.Scene{
             }
             // checks if bottle has landed
             if(update.landedCheck()){
-                console.log('bottle landed');
+                //console.log('bottle landed');
                 // Add cracked bottle where the bottle lands
                 this.add.image(update.bottleX(), update.bottleY(), 'crackedBottle');
                 if(!this.light2New){
@@ -858,7 +858,7 @@ class Play extends Phaser.Scene{
             }
             // checks if seeker has been destroyed
             if(update.destroyedCheck()){
-                console.log('seeker destroyed');
+                //console.log('seeker destroyed');
                 this.seekerLight.setRadius(0);
                 update.destroySeeker();
                 // Create a particle explosion and camera shake camera reset on delay
