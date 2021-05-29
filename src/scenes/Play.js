@@ -386,7 +386,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(705, 915, false, 2, true);
         this.spawnEnemy(672, 450, true, 4);
 
-        var exit = new Wall(this, 1020, 1020, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 1020, 1020, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
             console.log("Level Complete");
@@ -452,7 +452,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(2117, 305, true, 1);
         this.newLeverAndDoor(440, 464, 1273, 374, 4, 4);
         this.newLeverAndDoor(440, 103, 1273, 224, 4, 4);
-        var exit = new Wall(this, 2168, 282, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 2168, 282, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
             console.log("Level Complete");
@@ -486,7 +486,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(365, 235, true, 4);
         this.spawnEnemy(445, 615, true, 1);
         this.spawnEnemy(365, 115, true, 4);
-        var exit = new Wall(this, 78, 78, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 78, 78, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
             console.log("Level Complete");
