@@ -119,7 +119,7 @@ class Play extends Phaser.Scene{
                 this.backgroundLayer = this.map.createLayer('Background', this.tileset, 0, 0).setPipeline('Light2D');
                 this.map.createLayer('Grass', this.tileset, 0, 0).setPipeline('Light2D');
                 this.map.createLayer('Roads n Paths', this.tileset, 0, 0).setPipeline('Light2D');
-                this.map.createLayer('Physical Objects', this.tileset, 0, 0).setPipeline('Light2D');
+                this.map.createLayer('physical object', this.tileset, 0, 0).setPipeline('Light2D');
                 this.wallLayer = this.map.createLayer('Walls', this.tileset, 0, 0).setPipeline('Light2D');
                 this.wallLayer.setCollisionByExclusion(-1, true);
                 this.levelFourSetup();
@@ -130,7 +130,8 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.player, this.wallLayer);
 
         // Enables lights and sets ambient color
-        this.lights.enable().setAmbientColor(0x000000);
+        //this.lights.enable().setAmbientColor(0x000000);
+        this.lights.enable();
 
         // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for enemies
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
@@ -288,12 +289,16 @@ class Play extends Phaser.Scene{
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                    //level++;
-                    //this.scene.start('LoadScene');
-                    this.scene.start('MenuScene');
+                    level++;
+                    this.scene.start('LoadScene');
+                    //this.scene.start('MenuScene');
                 })
         });
         this.newLeverAndDoor(270, 515, 278, 465, 4);
+    }
+
+    levelFourSetup(){
+    
     }
 
     // Creates New Bottles at set location (x, y)
