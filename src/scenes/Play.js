@@ -10,6 +10,7 @@ class Play extends Phaser.Scene{
         this.load.image('bottle', './assets/bottle.png');
         this.load.image('crackedBottle', './assets/bottleCrak.png');
         this.load.image('footprint', './assets/footPrint.png');
+        this.load.image('exit', './assets/Exit.png');
 
         this.load.image('lever', './assets/tempLever.png');
         this.load.image('door', './assets/tempDoor.png');
@@ -159,7 +160,7 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.player, this.wallLayer);
 
         // Enables lights and sets ambient color
-        this.lights.enable().setAmbientColor(0x000000);
+        this.lights.enable().setAmbientColor(0x333333);
 
         // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for doors)
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
@@ -221,7 +222,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(443, 150, false, 2);
 
         // Spawn Exit
-        var exit = new Wall(this, 500, 35, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 500, 35, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
@@ -252,7 +253,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(315, 215, false, 4);
 
         // Spawn Exit
-        var exit = new Wall(this, 205, 15, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 205, 15, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
@@ -309,7 +310,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(680, 955, true, 4);
 
         // Spawn Exit
-        var exit = new Wall(this, 1030, 108, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 1030, 108, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
@@ -351,6 +352,21 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(365, 235, true, 4);
         this.spawnEnemy(445, 615, true, 1);
         this.spawnEnemy(365, 115, true, 4);
+
+        // Spawn Exit
+        var exit = new Wall(this, 60, 75, 'exit', 30,30).setOrigin(0,0);
+        exit.setAlpha(1);
+        // Setup Collision between Exit and Player
+        var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
+                console.log("Level Complete");
+                this.physics.world.removeCollider(collider);
+                this.cameras.main.fadeOut(500, 0, 0, 0);
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                    level++;
+                    this.scene.start('LoadScene');
+                    //this.scene.start('MenuScene');
+                })
+        });
     }
 
     // Creates New Bottles at set location (x, y)
