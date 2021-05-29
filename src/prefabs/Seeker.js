@@ -6,6 +6,8 @@ class Seeker extends Phaser.Physics.Arcade.Sprite{
         
         // Adds seeker to scene
         scene.add.existing(this);
+
+        // Initialize variables
         this.pickedUpSeeker = false;
         this.delayActive = false;
         this.seekerActive = false;
@@ -20,7 +22,6 @@ class Seeker extends Phaser.Physics.Arcade.Sprite{
             this.x = playerX;
             this.y = playerY;
 
-            // Throw bottle
             if (pointer.isDown && this.delayActive == false) {
                 this.seekerActive = true;
             }

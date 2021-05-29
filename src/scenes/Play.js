@@ -713,7 +713,7 @@ class Play extends Phaser.Scene{
         this.doorGroup.add(door);
     }
 
-    // Seeker on use stops player movement and allows use as a drone that destroys itself after _ seconds
+    // Seeker on use stops player movement and allows use as a drone that destroys itself after 4 seconds
     newSeeker(seekerX, seekerY) {
         var seeker = new Seeker(this, seekerX, seekerY, 'seeker').setOrigin(0.5);
         seeker.setPipeline('Light2D');
@@ -849,9 +849,11 @@ class Play extends Phaser.Scene{
             if(update.isActive() == true) {
                 this.player.usedSeeker();
                 this.player.stopPlayer();
+                // Activate seeker light
                 this.seekerLight.x = update.x;
                 this.seekerLight.y = update.y;
                 this.seekerLight.setRadius(50);
+                // Set camera to follow seeker
                 this.cameras.main.startFollow(update);
                 this.cameras.main.setBounds(0, 0, this.mapSizeWidth, this.mapSizeHeight);
                 this.cameras.main.setLerp(0.1, 0.1);
@@ -870,7 +872,7 @@ class Play extends Phaser.Scene{
                 //console.log('seeker destroyed');
                 this.seekerLight.setRadius(0);
                 update.destroySeeker();
-                // Create a particle explosion and camera shake camera reset on delay
+                // Reset camera follow and player movement. Create a particle explosion and camera shake camera reset on delay
                 this.time.delayedCall(500, () => {
                     this.cameras.main.startFollow(this.player);
                     this.cameras.main.setBounds(0, 0, this.mapSizeWidth, this.mapSizeHeight);
