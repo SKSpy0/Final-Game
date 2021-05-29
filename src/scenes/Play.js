@@ -570,9 +570,9 @@ class Play extends Phaser.Scene{
             }
         }
 
-        /*if(keySPACE.isDown){
+        if(keySPACE.isDown){
             console.log(this.player.x);
             console.log(this.player.y);
-        } */
+        }
     }
 }
