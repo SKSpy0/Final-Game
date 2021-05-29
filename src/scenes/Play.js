@@ -188,7 +188,16 @@ class Play extends Phaser.Scene{
 
         // Tutorial for Level 1
         if(level == 1){
-            270, 225
+            this.tutorialText = this.add.bitmapText(230, 210, 'customFont', 'Welcome', 30);
+            this.time.delayedCall(2000, () => {
+                this.tweens.add({
+                    targets: this.tutorialText,
+                    alpha: 0,
+                    duration: 500,
+                    ease: 'Linear'
+                }, this);
+            })
+            
         }
 
         // Set Collision between wall and player
@@ -214,7 +223,7 @@ class Play extends Phaser.Scene{
         this.light3New = false;
         this.light3Radius = 0;
 
-        this.seekerLight = this.lights.addLight(0, 0, 50).setColor(0xffffff).setIntensity(1);
+        this.seekerLight = this.lights.addLight(0, 0, 50).setColor(0xffffff).setIntensity(2);
         this.seekerLight.setRadius(0);
         this.light3Intensity = 2;
 
