@@ -25,6 +25,8 @@ class Play extends Phaser.Scene{
         this.load.tilemapTiledJSON('level2', './assets/Level2.json');
         this.load.tilemapTiledJSON('level3', './assets/Level3.json');
         this.load.tilemapTiledJSON('level4', './assets/Level4.json');
+        this.load.tilemapTiledJSON('level5', './assets/Level5.json');
+        this.load.tilemapTiledJSON('level6', './assets/Level6.json');
     }
 
     create() {
@@ -78,6 +80,8 @@ class Play extends Phaser.Scene{
         switch(level){
             case 1:
                 this.player.setCollideWorldBounds(true);
+
+                // create each layer in the tilemap
                 this.map = this.add.tilemap('level1');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
                 this.backgroundLayer = this.map.createLayer('Background', this.tileset, 0, 0).setPipeline('Light2D');
@@ -87,6 +91,8 @@ class Play extends Phaser.Scene{
                 break;
             case 2:
                 this.player.setCollideWorldBounds(true);
+
+                // create each layer in the tilemap
                 this.map = this.add.tilemap('level2');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
                 this.backgroundLayer = this.map.createLayer("Background", this.tileset, 0, 0).setPipeline('Light2D');
@@ -100,6 +106,7 @@ class Play extends Phaser.Scene{
                 this.cameras.main.startFollow(this.player);
                 this.cameras.main.setLerp(0.1, 0.1);
 
+                // create each layer in the tilemap
                 this.map = this.add.tilemap('level3');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
                 this.backgroundLayer = this.map.createLayer('Background', this.tileset, 0, 0).setPipeline('Light2D');
@@ -111,9 +118,12 @@ class Play extends Phaser.Scene{
                 this.levelThreeSetup();
                 break;
             case 4:
+                // setup camera
                 this.cameras.main.setBounds(0, 0, 1080, 1080);
                 this.cameras.main.startFollow(this.player);
                 this.cameras.main.setLerp(0.1, 0.1);
+
+                // create each layer in the tilemap
                 this.map = this.add.tilemap('level4');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
                 this.backgroundLayer = this.map.createLayer('Background', this.tileset, 0, 0).setPipeline('Light2D');
@@ -124,6 +134,25 @@ class Play extends Phaser.Scene{
                 this.wallLayer.setCollisionByExclusion(-1, true);
                 this.levelFourSetup();
                 break;
+            case 5:
+                break;
+            case 6:
+                // setup camera
+                this.cameras.main.setBounds(0, 0, 720, 720);
+                this.cameras.main.startFollow(this.player);
+                this.cameras.main.setLerp(0.1, 0.1);
+
+                // create each layer in the tilemap
+                this.map = this.add.tilemap('level6');
+                this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
+                this.backgroundLayer = this.map.createLayer('Background', this.tileset, 0, 0).setPipeline('Light2D');
+                this.map.createLayer('Roads/Paths', this.tileset, 0, 0).setPipeline('Light2D');
+                this.map.createLayer('Physical Objects', this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer = this.map.createLayer('Walls', this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer.setCollisionByExclusion(-1, true);
+                this.levelSixSetup();
+                break;
+
         }
 
         // Set Collision between wall and player
@@ -132,7 +161,7 @@ class Play extends Phaser.Scene{
         // Enables lights and sets ambient color
         this.lights.enable().setAmbientColor(0x000000);
 
-        // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for enemies
+        // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for doors)
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
 
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(2);
@@ -178,7 +207,7 @@ class Play extends Phaser.Scene{
         }
     }
 
-    // Setup for Level One
+    // Helper Functions for each levels setup, each will place the player, bottles, and enemies in each level and spawn the exit for each
     levelOneSetup() {
         // Spawn Player, Bottles, and Enemies in the level
         this.player.x = 450;
@@ -355,6 +384,30 @@ class Play extends Phaser.Scene{
                 this.scene.start('LoadScene');
             })
     });
+    }
+
+    levelSixSetup(){
+        this.player.x = 580;
+        this.player.y = 605;
+        this.newBottle(550, 580);
+        this.newBottle(615, 580);
+        this.newBottle(555, 375);
+        this.newBottle(565, 195);
+        this.newBottle(450, 195);
+        this.newBottle(375, 465);
+        this.newBottle(285, 345);
+        this.newBottle(105, 345);
+        this.newBottle(225, 675);
+        this.spawnEnemy(510, 485, true, 1);
+        this.spawnEnemy(315, 415, true, 4);
+        this.spawnEnemy(215, 350, false, 2);
+        this.spawnEnemy(45, 415, false, 4);
+        this.spawnEnemy(55, 670, true, 1);
+        this.spawnEnemy(100, 655, false, 4);
+        this.spawnEnemy(515, 300, true, 3);
+        this.spawnEnemy(365, 235, true, 4);
+        this.spawnEnemy(445, 615, true, 1);
+        this.spawnEnemy(365, 115, true, 4);
     }
 
     // Creates New Bottles at set location (x, y)
@@ -622,7 +675,9 @@ class Play extends Phaser.Scene{
             this.light1Intensity = 2;
             this.light1.setIntensity(this.light1Intensity);
         } else {
-            this.light1Intensity -= 0.07;
+            if(this.light1Intensity > 0){
+                this.light1Intensity -= 0.07;
+            }
             this.light1Radius -= 1.3;
             this.light1.setIntensity(this.light1Intensity);
             if(this.light1Radius <= 0){
@@ -640,7 +695,9 @@ class Play extends Phaser.Scene{
             this.light2Intensity = 2;
             this.light2.setIntensity(this.light2Intensity);
         } else {
-            this.light2Intensity -= 0.05;
+            if(this.light2Intensity > 0){
+                this.light2Intensity -= 0.05;
+            }
             this.light2Radius -= 1.8;
             this.light2.setIntensity(this.light2Intensity);
             if(this.light2Radius <= 0){
