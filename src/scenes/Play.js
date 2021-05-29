@@ -19,6 +19,7 @@ class Play extends Phaser.Scene{
         this.load.audio('bottleBreak', './assets/glassBottleBreak.mp3');
         this.load.audio('throw', './assets/throw.mp3');
         this.load.audio('footstep', './assets/footStep1.mp3');
+        this.load.audio('doorOpen', './assets/doorOpening.mp3');
 
         // loading tilemaps
         this.load.image('tiles', './assets/VignetteEscapeTileSet.png');
@@ -55,6 +56,10 @@ class Play extends Phaser.Scene{
             loop: false,
             volume: 0.15
         });
+        this.doorOpenSound = this.sound.add('doorOpen', {
+            loop: false,
+            volume: 0.3
+        })
 
         // Set cursors
         //cursors = this.input.keyboard.createCursorKeys();
@@ -171,7 +176,7 @@ class Play extends Phaser.Scene{
 
         // Tutorial for Level 1
         if(level == 1){
-
+            270, 225
         }
 
         // Set Collision between wall and player
@@ -196,7 +201,7 @@ class Play extends Phaser.Scene{
         this.light3 = this.lights.addLight(200, 200, 0).setColor(0xffffff).setIntensity(2);
         this.light3New = false;
         this.light3Radius = 0;
-
+        this.light3Intensity = 2;
 
         // Interaction/Pickup text for UI
         this.bottlePickupText = this.add.bitmapText(45, 500, 'customFont', "picked up bottle", 28);
@@ -663,10 +668,15 @@ class Play extends Phaser.Scene{
                 }, this);
             })
             if(keyE.isDown && lever.isPlayerUsing() == false) {
+                // Create wave for door opening and sound
+                this.createDoorWave(door.x, door.y);
+
                 // Play lever animation with a delay on the next time you can use the lever 
                 lever.useLever(this.time);
+
                 // Play door animation and set the door state
                 door.openCloseDoor();
+
                 // If the door is closed, add the collider else the door is open - remove the collider
                 if(door.isOpen() == false) {
                     collider.active = true;
@@ -680,9 +690,9 @@ class Play extends Phaser.Scene{
 
     //generates player footsteps
     createFootstep(){
+        this.light1.setPosition(this.player.x, this.player.y);
         this.light1New = true;
         this.light1Radius = 0;
-        this.light1.setPosition(this.player.x, this.player.y);
         this.time.addEvent({
             delay: 900,
             callback: () => {
@@ -695,9 +705,9 @@ class Play extends Phaser.Scene{
 
     // generates bottle sound wave
     createBottleWave(bottle){
+        this.light2.setPosition(bottle.x, bottle.y);
         this.light2New = true;
         this.light2Radius = 0;
-        this.light2.setPosition(bottle.x, bottle.y);
         this.bottleBreakSound.play();
         this.time.addEvent({
             delay: 1200,
@@ -730,6 +740,20 @@ class Play extends Phaser.Scene{
         this.footprintsNew = true;
     }
 
+    // generates door sound waves
+    createDoorWave(x, y){
+        this.light3.setPosition(x, y);
+        this.light3New = true;
+        this.light3Radius = 0;
+        this.doorOpenSound.play();
+        this.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                this.light3New = false;
+            }
+        })
+    }
+
     update() {
         // End game when player gets caught
         if(!this.gameOver && this.playerCaught){
@@ -755,7 +779,7 @@ class Play extends Phaser.Scene{
             if(update.hasThrown() == true) {
                 this.player.thrownBottle();
                 //this.bottlePickupText.setAlpha(0);
-                //this.throwSound.play();
+                this.throwSound.play();
                 // Set a delay for throwing the next bottle
                 for (var j = 0; j < this.bottleGroup.getLength(); j++) {
                     var delayCall = this.bottleGroup.getChildren()[j];
@@ -814,6 +838,26 @@ class Play extends Phaser.Scene{
                 this.light2.setRadius(0);
                 this.light2Intensity = 2;
                 this.light2.setIntensity(2);
+            }
+        }
+
+        // Wave Effect for Door Lights
+        if(this.light3New){
+            this.light3Radius += 1.8;
+            this.light3.setRadius(this.light3Radius);
+            this.light3Intensity = 2;
+            this.light3.setIntensity(this.light3Intensity);
+        } else {
+            if(this.light3Intensity > 0){
+                this.light3Intensity -= 0.05;
+            }
+            this.light3Radius -= 1.8;
+            this.light3.setIntensity(this.light3Intensity);
+            if(this.light3Radius <= 0){
+                this.light3Radius = 0;
+                this.light3.setRadius(0);
+                this.light3Intensity = 2;
+                this.light3.setIntensity(2);
             }
         }
 
