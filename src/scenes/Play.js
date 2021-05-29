@@ -625,6 +625,7 @@ class Play extends Phaser.Scene{
     update() {
         // End game when player gets caught
         if(!this.gameOver && this.playerCaught){
+            this.player.stopPlayer();
             this.cameras.main.shake(100, 0.0035);
             console.log("death fade out")
             this.gameOver = true;

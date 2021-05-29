@@ -15,49 +15,57 @@ class Player extends Phaser.Physics.Arcade.Sprite{
 
         this.holdingBottle = false;
 
+        this.playerAlive = true;
+
     }
 
     update() {
-        // Player movement
-        if(keyA.isDown) {
-            this.body.setVelocityX(-this.playerVelocity);
-            this.setAngle(-90);
-            this.moving = true;
-        } else if (keyD.isDown) {
-            this.body.setVelocityX(this.playerVelocity);
-            this.setAngle(90);
-            this.moving = true;
+        // If the player is still alive
+        if(this.playerAlive) {
+            // Player movement
+            if(keyA.isDown) {
+                this.body.setVelocityX(-this.playerVelocity);
+                this.setAngle(-90);
+                this.moving = true;
+            } else if (keyD.isDown) {
+                this.body.setVelocityX(this.playerVelocity);
+                this.setAngle(90);
+                this.moving = true;
+            } else {
+                this.body.setVelocityX(0);
+                this.moving = false;
+            }
+            if (keyW.isDown) {
+                this.body.setVelocityY(-this.playerVelocity);
+                this.setAngle(0);
+                this.moving = true;
+            } else if (keyS.isDown) {
+                this.body.setVelocityY(this.playerVelocity);
+                this.setAngle(180);
+                this.moving = true;
+            } else {
+                this.body.setVelocityY(0);
+                this.moving = false;
+            }
+
+            // Diagonal Movement Check
+            if(keyW.isDown && keyD.isDown) {
+                this.setAngle(45);
+            }
+            if(keyW.isDown && keyA.isDown) {
+                this.setAngle(-45);
+            }
+            if(keyD.isDown && keyS.isDown) {
+                this.setAngle(135);
+            }
+            if(keyA.isDown && keyS.isDown) {
+                this.setAngle(-135);
+            }
+
         } else {
             this.body.setVelocityX(0);
-            this.moving = false;
-        }
-        if (keyW.isDown) {
-            this.body.setVelocityY(-this.playerVelocity);
-            this.setAngle(0);
-            this.moving = true;
-        } else if (keyS.isDown) {
-            this.body.setVelocityY(this.playerVelocity);
-            this.setAngle(180);
-            this.moving = true;
-        } else {
             this.body.setVelocityY(0);
-            this.moving = false;
         }
-
-        // Diagonal Movement Check
-        if(keyW.isDown && keyD.isDown) {
-            this.setAngle(45);
-        }
-        if(keyW.isDown && keyA.isDown) {
-            this.setAngle(-45);
-        }
-        if(keyD.isDown && keyS.isDown) {
-            this.setAngle(135);
-        }
-        if(keyA.isDown && keyS.isDown) {
-            this.setAngle(-135);
-        }
-
     }
 
     // Returns true if player is moving
@@ -75,5 +83,9 @@ class Player extends Phaser.Physics.Arcade.Sprite{
     // Sets false when player throws bottle
     thrownBottle() {
         this.holdingBottle = false;
+    }
+    // Stops player movement when hit by enemy
+    stopPlayer() {
+        this.playerAlive = false;
     }
 }
