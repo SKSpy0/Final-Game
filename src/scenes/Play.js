@@ -200,7 +200,7 @@ class Play extends Phaser.Scene{
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                    level = level+3;
+                    level++;
                     this.scene.start('LoadScene');
                 })
         });
@@ -297,7 +297,64 @@ class Play extends Phaser.Scene{
     }
 
     levelFourSetup(){
-    
+        this.player.x = 1004;
+        this.player.y = 73;
+        this.newBottle(976, 132);
+        this.newBottle(1035, 225);
+        this.newBottle(706, 43);
+        this.newBottle(555, 103);
+        this.newBottle(704, 345);
+        this.newBottle(373, 284);
+        this.newBottle(224, 463);
+        this.newBottle(168, 1007);
+        this.newBottle(45, 1004);
+        this.newBottle(884, 674);
+        this.newBottle(705, 857);
+        this.newBottle(735, 1004);
+        this.newBottle(857, 824);
+        this.newBottle(1034, 943);
+
+        this.spawnEnemy(910, 195, true, 1);
+        this.spawnEnemy(860, 195, true, 2);
+        this.spawnEnemy(643, 225, false, 4);
+        this.spawnEnemy(375, 105, false, 4);
+        this.spawnEnemy(347, 165, true, 4, true);
+        this.spawnEnemy(583, 367, true, 3);
+        this.spawnEnemy(430, 350, true, 4);
+        this.spawnEnemy(1030, 443, true, 3);
+        this.spawnEnemy(1030, 480, true, 3);
+        this.spawnEnemy(990, 527, false, 1);
+        this.spawnEnemy(43, 344, true, 2, true);
+        this.spawnEnemy(224, 555, false, 2);
+        this.spawnEnemy(104, 553, false, 2);
+        this.spawnEnemy(105, 463, false, 2);
+        this.spawnEnemy(165, 374, true, 2, true);
+        this.spawnEnemy(345, 733, true, 2, true);
+        this.spawnEnemy(43, 733, true, 4, true);
+        this.spawnEnemy(43, 795, true, 4, true);
+        this.spawnEnemy(198, 858, true, 2, true);
+        this.spawnEnemy(375, 1032, true, 1, true);
+        this.spawnEnemy(433, 1032, true, 1, true);
+        this.spawnEnemy(765, 765, true, 2, true);
+        this.spawnEnemy(825, 764, false, 4);
+        this.spawnEnemy(915, 765, false, 4);
+        this.spawnEnemy(795, 1034, false, 1, true);
+        this.spawnEnemy(705, 915, false, 2, true);
+        this.spawnEnemy(672, 450, true, 4);
+
+
+
+        var exit = new Wall(this, 1020, 1020, 'footprint', 30,30).setOrigin(0,0);
+        exit.setAlpha(1);
+        var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
+            console.log("Level Complete");
+            this.physics.world.removeCollider(collider);
+            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                level++;
+                this.scene.start('LoadScene');
+            })
+    });
     }
 
     // Creates New Bottles at set location (x, y)
@@ -332,9 +389,13 @@ class Play extends Phaser.Scene{
 
     // Spawns new enemies (roaming: true = yes, false = no)
     // (facing: up = 1, down = 2, left = 3, right = 4)
-    spawnEnemy(PosX, PosY, roaming, facing){
+    spawnEnemy(PosX, PosY, roaming, facing, scaleDown){
         let enemy = new Enemy(this, PosX, PosY, 'enemy', roaming, facing);
-        enemy.setScale(0.6);
+        if (scaleDown == true) {
+            enemy.setScale(0.4);
+        } else {
+            enemy.setScale(0.6);
+        }
         enemy.setPipeline('Light2D')
         switch(facing){
             case 1:
@@ -511,6 +572,7 @@ class Play extends Phaser.Scene{
     update() {
         // End game when player gets caught
         if(!this.gameOver && this.playerCaught){
+            this.cameras.main.shake(100, 0.0035);
             console.log("death fade out")
             this.gameOver = true;
             this.cameras.main.fadeOut(500, 0, 0, 0);
