@@ -8,7 +8,7 @@ class GameOver extends Phaser.Scene{
         this.return = this.add.bitmapText(centerWidth, centerHeight+100, 'customFont', 'Return to main menu', 28).setOrigin(0.5);
         this.replay = this.add.bitmapText(centerWidth, centerHeight+50, 'customFont', 'Replay Level', 28).setOrigin(0.5);
         this.return.setInteractive({useHandCursor: true});
-        this.replay.setInteractive({useHnadCursor: true});
+        this.replay.setInteractive({useHandCursor: true});
         
         // Initialize variables
         this.clicked = false;

@@ -67,6 +67,7 @@ class Play extends Phaser.Scene{
         this.enemyGroup = this.add.group({
             runChildUpdate: true
         });
+        this.doorGroup = this.add.group();
 
         // Add player
         this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
@@ -134,9 +135,13 @@ class Play extends Phaser.Scene{
         this.light3Radius = 0;
 
 
-        // Bottle pick up text for UI
-        this.bottlePickupText = this.add.bitmapText(45, 500, 'customFont', "picked up bottle", 32);
+        // Interaction/Pickup text for UI
+        this.bottlePickupText = this.add.bitmapText(45, 500, 'customFont', "picked up bottle", 28);
         this.bottlePickupText.setAlpha(0);
+        this.bottlePickupText.setDepth(99);
+        this.interactText = this.add.bitmapText(45, 500, 'customFont', "press E to interact", 28);
+        this.interactText.setAlpha(0);
+        this.interactText.setDepth(99);
 
         // Will create a new footstep sound wave 
         this.waveSpawnTimer = this.time.addEvent({
@@ -146,10 +151,13 @@ class Play extends Phaser.Scene{
             loop: true,
         });
 
-        // Sets overlap between bottle and walls
+        // Sets overlap between bottle and walls and doors
         for (var i = 0; i < this.bottleGroup.getLength(); i++) {
             var update = this.bottleGroup.getChildren()[i];
             this.physics.add.collider(update, this.wallLayer, (update, wallLayer) => {
+                update.hitWall();
+            });
+            this.physics.add.collider(update, this.doorGroup, (update, doorGroup) => {
                 update.hitWall();
             });
         }
@@ -281,7 +289,18 @@ class Play extends Phaser.Scene{
         // Create collision check between player and bottle
         var collider = this.physics.add.overlap(this.player, bottle, (player, bottle) => {
             if (this.player.hasBottle() == false) {
+                // Bottle pickup text that fades out
+                this.bottlePickupText.x = this.player.x - this.player.width;
+                this.bottlePickupText.y = this.player.y - 40;
                 this.bottlePickupText.setAlpha(1);
+                this.time.delayedCall(1000, () => {
+                    this.tweens.add({
+                        targets: this.bottlePickupText,
+                        alpha: 0,
+                        duration: 500,
+                        ease: 'Linear'
+                    }, this);
+                })
                 this.bottlePickupSound.play();
                 this.player.pickedUpBottle();
                 bottle.pickedUp();
@@ -390,6 +409,18 @@ class Play extends Phaser.Scene{
         }
         var collider = this.physics.add.collider(this.player, door);
         this.physics.add.overlap(this.player, lever, () => {
+            // Add text when near lever with fade out
+            this.interactText.x = lever.x - this.interactText.width/2;
+            this.interactText.y = lever.y - 40;
+            this.interactText.setAlpha(1);
+            this.time.delayedCall(1000, () => {
+                this.tweens.add({
+                    targets: this.interactText,
+                    alpha: 0,
+                    duration: 500,
+                    ease: 'Linear'
+                }, this);
+            })
             if(keyE.isDown && lever.isPlayerUsing() == false) {
                 // Play lever animation with a delay on the next time you can use the lever 
                 lever.useLever(this.time);
@@ -403,6 +434,7 @@ class Play extends Phaser.Scene{
                 }
             }
         });
+        this.doorGroup.add(door);
     }
 
     //generates player footsteps
@@ -479,7 +511,7 @@ class Play extends Phaser.Scene{
             // If bottle has been thrown
             if(update.hasThrown() == true) {
                 this.player.thrownBottle();
-                this.bottlePickupText.setAlpha(0);
+                //this.bottlePickupText.setAlpha(0);
                 //this.throwSound.play();
                 // Set a delay for throwing the next bottle
                 for (var j = 0; j < this.bottleGroup.getLength(); j++) {
