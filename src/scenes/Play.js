@@ -24,6 +24,7 @@ class Play extends Phaser.Scene{
         this.load.tilemapTiledJSON('level1', './assets/Level1.json');
         this.load.tilemapTiledJSON('level2', './assets/Level2.json');
         this.load.tilemapTiledJSON('level3', './assets/Level3.json');
+        this.load.tilemapTiledJSON('level4', './assets/Level4.json');
     }
 
     create() {
@@ -109,6 +110,20 @@ class Play extends Phaser.Scene{
                 this.wallLayer.setCollisionByExclusion(-1, true);
                 this.levelThreeSetup();
                 break;
+            case 4:
+                this.cameras.main.setBounds(0, 0, 1080, 1080);
+                this.cameras.main.startFollow(this.player);
+                this.cameras.main.setLerp(0.1, 0.1);
+                this.map = this.add.tilemap('level4');
+                this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
+                this.backgroundLayer = this.map.createLayer('Background', this.tileset, 0, 0).setPipeline('Light2D');
+                this.map.createLayer('Grass', this.tileset, 0, 0).setPipeline('Light2D');
+                this.map.createLayer('Roads n Paths', this.tileset, 0, 0).setPipeline('Light2D');
+                this.map.createLayer('physical object', this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer = this.map.createLayer('Walls', this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer.setCollisionByExclusion(-1, true);
+                this.levelFourSetup();
+                break;
         }
 
         // Set Collision between wall and player
@@ -185,7 +200,7 @@ class Play extends Phaser.Scene{
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                    level++;
+                    level = level+3;
                     this.scene.start('LoadScene');
                 })
         });
@@ -273,12 +288,16 @@ class Play extends Phaser.Scene{
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                    //level++;
-                    //this.scene.start('LoadScene');
-                    this.scene.start('MenuScene');
+                    level++;
+                    this.scene.start('LoadScene');
+                    //this.scene.start('MenuScene');
                 })
         });
         this.newLeverAndDoor(270, 515, 278, 465, 4);
+    }
+
+    levelFourSetup(){
+    
     }
 
     // Creates New Bottles at set location (x, y)
