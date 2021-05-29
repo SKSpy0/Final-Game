@@ -167,6 +167,10 @@ class Play extends Phaser.Scene{
                 this.wallLayer.setCollisionByExclusion(-1, true);
                 this.levelSixSetup();
                 break;
+        }
+
+        // Tutorial for Level 1
+        if(level == 1){
 
         }
 
@@ -498,10 +502,10 @@ class Play extends Phaser.Scene{
                 this.scene.start('MenuScene');
             })
         });
-        this.newLeverAndDoor(202, 47, 138, 74, 4, 4);
-        this.newLeverAndDoor(43, 338, 75, 224, 2, 2);
-        this.newLeverAndDoor(343, 608, 313, 74, 2, 3);
-        this.newLeverAndDoor(128, 614, 435, 585, 3, 2);
+        this.newLeverAndDoor(43, 338, 313, 74, 2, 3);
+        this.newLeverAndDoor(128, 614, 75, 224, 3, 2);
+        this.newLeverAndDoor(343, 608, 138, 74, 2, 4);
+        this.newLeverAndDoor(202, 47, 435, 585, 4, 2);
     }
 
     // Creates New Bottles at set location (x, y)
