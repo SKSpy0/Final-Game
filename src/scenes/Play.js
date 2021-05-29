@@ -135,6 +135,20 @@ class Play extends Phaser.Scene{
                 this.levelFourSetup();
                 break;
             case 5:
+                // setup camera
+                this.cameras.main.setBounds(0, 0, 2220, 600);
+                this.cameras.main.startFollow(this.player);
+                this.cameras.main.setLerp(0.1, 0.1);
+
+                // create each layer in the tilemap
+                this.map = this.add.tilemap('level5');
+                this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
+                this.map.createLayer('Grass', this.tileset, 0, 0).setPipeline('Light2D');
+                this.map.createLayer('Roads/Path', this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer = this.map.createLayer('Walls', this.tileset, 0, 0).setPipeline('Light2D');
+                this.map.createLayer('Physical Objects', this.tileset, 0, 0).setPipeline('Light2D');
+                this.wallLayer.setCollisionByExclusion(-1, true);
+                this.levelFiveSetup();
                 break;
             case 6:
                 // setup camera
@@ -322,7 +336,7 @@ class Play extends Phaser.Scene{
                     //this.scene.start('MenuScene');
                 })
         });
-        this.newLeverAndDoor(270, 515, 278, 465, 4);
+        this.newLeverAndDoor(270, 515, 278, 465, 4, 4);
     }
 
     levelFourSetup(){
@@ -371,8 +385,6 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(705, 915, false, 2, true);
         this.spawnEnemy(672, 450, true, 4);
 
-
-
         var exit = new Wall(this, 1020, 1020, 'footprint', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
@@ -385,7 +397,72 @@ class Play extends Phaser.Scene{
             })
     });
     }
-
+    levelFiveSetup() {
+        this.player.x = 55;
+        this.player.y = 295;
+        this.newBottle(105, 432);
+        this.newBottle(285, 434);
+        this.newBottle(287, 165);
+        this.newBottle(343, 132);
+        this.newBottle(343, 105);
+        this.newBottle(343, 467);
+        this.newBottle(343, 493);
+        this.newBottle(582, 134);
+        this.newBottle(583, 463);
+        this.newBottle(735, 463);
+        this.newBottle(828, 463);
+        this.newBottle(828, 493);
+        this.newBottle(735, 493);
+        this.newBottle(1094, 468);
+        this.newBottle(1154, 133);
+        this.newBottle(1217, 378);
+        this.newBottle(1312, 378);
+        this.newBottle(1424, 192);
+        this.newBottle(1424, 407);
+        this.newBottle(1694, 518);
+        this.newBottle(1872, 298);
+        this.newBottle(1997, 215);
+        this.newBottle(1997, 383);
+        this.newBottle(1772, 490);
+        this.newBottle(1772, 103);
+        this.newBottle(2114, 103);
+        this.newBottle(2114, 490);
+        this.spawnEnemy(377, 108, true, 2, true);
+        this.spawnEnemy(404, 493, true, 1, true);
+        this.spawnEnemy(494, 554, true, 3, true);
+        this.spawnEnemy(494, 47, true, 3, true);
+        this.spawnEnemy(1242, 554, true, 3, true);
+        this.spawnEnemy(1242, 47, true, 3, true);
+        this.spawnEnemy(612, 467, true, 1);
+        this.spawnEnemy(797, 487, true, 1, true);
+        this.spawnEnemy(764, 134, true, 2, true);
+        this.spawnEnemy(1004, 489, true, 1);
+        this.spawnEnemy(1102, 168, true, 2);
+        this.spawnEnemy(1184, 437, true, 1);
+        this.spawnEnemy(1215, 135, true, 1, true);
+        this.spawnEnemy(1305, 283, true, 4, true);
+        this.spawnEnemy(1305, 315, true, 4, true);
+        this.spawnEnemy(1725, 315, true, 3, true);
+        this.spawnEnemy(1725, 283, true, 3, true);
+        this.spawnEnemy(1320, 507, true, 4);
+        this.spawnEnemy(1320, 92, true, 4);
+        this.spawnEnemy(1882, 472, true, 4, true);
+        this.spawnEnemy(1882, 130, true, 4, true);
+        this.spawnEnemy(2117, 305, true, 1);
+        this.newLeverAndDoor(440, 464, 1273, 374, 4, 4);
+        this.newLeverAndDoor(440, 103, 1273, 224, 4, 4);
+        var exit = new Wall(this, 2168, 282, 'footprint', 30,30).setOrigin(0,0);
+        exit.setAlpha(1);
+        var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
+            console.log("Level Complete");
+            this.physics.world.removeCollider(collider);
+            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                level++;
+                this.scene.start('LoadScene');
+            })
+        });
+    }
     levelSixSetup(){
         this.player.x = 580;
         this.player.y = 605;
@@ -408,6 +485,22 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(365, 235, true, 4);
         this.spawnEnemy(445, 615, true, 1);
         this.spawnEnemy(365, 115, true, 4);
+        var exit = new Wall(this, 78, 78, 'footprint', 30,30).setOrigin(0,0);
+        exit.setAlpha(1);
+        var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
+            console.log("Level Complete");
+            this.physics.world.removeCollider(collider);
+            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                //level++;
+                //this.scene.start('LoadScene');
+                this.scene.start('MenuScene');
+            })
+        });
+        this.newLeverAndDoor(202, 47, 138, 74, 4, 4);
+        this.newLeverAndDoor(43, 338, 75, 224, 2, 2);
+        this.newLeverAndDoor(343, 608, 313, 74, 2, 3);
+        this.newLeverAndDoor(128, 614, 435, 585, 3, 2);
     }
 
     // Creates New Bottles at set location (x, y)
@@ -515,29 +608,39 @@ class Play extends Phaser.Scene{
 
     // Creates a door and a lever that open/closes that door
     // (facing: up = 1, down = 2, left = 3, right = 4)
-    newLeverAndDoor(leverX, leverY, doorX, doorY, facing) {
+    newLeverAndDoor(leverX, leverY, doorX, doorY, leverFacing, doorFacing) {
         var door = new Door(this, doorX, doorY, 'door');
         var lever = new Lever(this, leverX, leverY, 'lever');
         door.setPipeline('Light2D')
         lever.setPipeline('Light2D')
-        switch(facing){
+        switch(leverFacing){
             case 1:
                 break;
             case 2:
-                door.angle = 180;
                 lever.angle = 180;
                 break;
             case 3:
-                door.angle = -90;
-                door.rotateHitbox();
                 lever.angle = -90;
                 lever.rotateHitbox();
                 break;
             case 4:
-                door.angle = 90;
-                door.rotateHitbox();
                 lever.angle = 90;
                 lever.rotateHitbox();
+                break;
+        }
+        switch(doorFacing){
+            case 1:
+                break;
+            case 2:
+                door.angle = 180;
+                break;
+            case 3:
+                door.angle = -90;
+                door.rotateHitbox();
+                break;
+            case 4:
+                door.angle = 90;
+                door.rotateHitbox();
                 break;
         }
         var collider = this.physics.add.collider(this.player, door);
