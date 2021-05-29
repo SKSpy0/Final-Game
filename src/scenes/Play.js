@@ -117,16 +117,18 @@ class Play extends Phaser.Scene{
         // Enables lights and sets ambient color
         this.lights.enable().setAmbientColor(0x000000);
 
-        // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for enemy footsteps)
+        // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for enemies
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
 
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(2);
         this.light1New = false;
         this.light1Radius = 0;
+        this.light1Intensity = 2;
 
         this.light2 = this.lights.addLight(200, 200, 0).setColor(0xffffff).setIntensity(2);
         this.light2New = false;
         this.light2Radius = 0;
+        this.light2Intensity = 2;
 
         this.light3 = this.lights.addLight(200, 200, 0).setColor(0xffffff).setIntensity(2);
         this.light3New = false;
@@ -534,13 +536,17 @@ class Play extends Phaser.Scene{
 
         // Wave effect for Footstep Lights
         if(this.light1New){
-            this.light1Radius += 1.8
+            this.light1Radius += 1.8;
             this.light1.setRadius(this.light1Radius);
         } else {
-            this.light1Radius -= 1.8
-            this.light1.setRadius(this.light1Radius);
+            this.light1Intensity -= 0.01;
+            this.light1Radius -= 1.8;
+            this.light1.setIntensity(this.light1Intensity);
             if(this.light1Radius <= 0){
+                this.light1Radius = 0;
                 this.light1.setRadius(0);
+                this.light1Intensity = 2;
+                this.light1.setIntensity(2);
             }
         } 
 
@@ -549,10 +555,13 @@ class Play extends Phaser.Scene{
             this.light2Radius += 1.8
             this.light2.setRadius(this.light2Radius);
         } else {
-            this.light2Radius -= 1.8
-            this.light2.setRadius(this.light2Radius);
-            if(this.light2Radius <= 0){
+            this.light2Intensity -= 0.01;
+            this.light2.setIntensity(this.light2Intensity);
+            if(this.light2Intensity <= 0){
+                this.light2Radius = 0;
                 this.light2.setRadius(0);
+                this.light2Intensity = 2;
+                this.light2.setIntensity(2);
             }
         }
 

@@ -3,11 +3,7 @@
  <editorsettings>
   <export format="json"/>
  </editorsettings>
-<<<<<<< Updated upstream
  <tileset firstgid="1" name="VignetteEscapeTileSet" tilewidth="30" tileheight="30" tilecount="324" columns="18">
-=======
- <tileset firstgid="1" name="TileSet" tilewidth="30" tileheight="30" tilecount="324" columns="18">
->>>>>>> Stashed changes
   <image source="VignetteEscapeTileSet.png" trans="ff00ff" width="540" height="540"/>
  </tileset>
  <layer id="3" name="Background" width="36" height="36">
