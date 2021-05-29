@@ -3,7 +3,7 @@
  <editorsettings>
   <export target="Level4.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" name="TileSet" tilewidth="30" tileheight="30" tilecount="324" columns="18">
+ <tileset firstgid="1" name="VignetteEscapeTileSet" tilewidth="30" tileheight="30" tilecount="324" columns="18">
   <image source="VignetteEscapeTileSet.png" trans="ff00ff" width="540" height="540"/>
  </tileset>
  <layer id="1" name="Background" width="36" height="36">
