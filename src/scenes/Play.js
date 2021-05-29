@@ -10,6 +10,7 @@ class Play extends Phaser.Scene{
         this.load.image('bottle', './assets/bottle.png');
         this.load.image('crackedBottle', './assets/bottleCrak.png');
         this.load.image('footprint', './assets/footPrint.png');
+        this.load.image('exit', './assets/Exit.png');
 
         this.load.image('lever', './assets/tempLever.png');
         this.load.image('door', './assets/tempDoor.png');
@@ -19,6 +20,7 @@ class Play extends Phaser.Scene{
         this.load.audio('bottleBreak', './assets/glassBottleBreak.mp3');
         this.load.audio('throw', './assets/throw.mp3');
         this.load.audio('footstep', './assets/footStep1.mp3');
+        this.load.audio('doorOpen', './assets/doorOpening.mp3');
 
         // loading tilemaps
         this.load.image('tiles', './assets/VignetteEscapeTileSet.png');
@@ -55,6 +57,10 @@ class Play extends Phaser.Scene{
             loop: false,
             volume: 0.15
         });
+        this.doorOpenSound = this.sound.add('doorOpen', {
+            loop: false,
+            volume: 0.3
+        })
 
         // Set cursors
         //cursors = this.input.keyboard.createCursorKeys();
@@ -178,14 +184,18 @@ class Play extends Phaser.Scene{
                 this.wallLayer.setCollisionByExclusion(-1, true);
                 this.levelSixSetup();
                 break;
+        }
 
+        // Tutorial for Level 1
+        if(level == 1){
+            270, 225
         }
 
         // Set Collision between wall and player
         this.physics.add.collider(this.player, this.wallLayer);
 
         // Enables lights and sets ambient color
-        this.lights.enable().setAmbientColor(0x000000);
+        this.lights.enable().setAmbientColor(0x333333);
 
         // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for doors)
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
@@ -206,6 +216,7 @@ class Play extends Phaser.Scene{
 
         this.seekerLight = this.lights.addLight(0, 0, 50).setColor(0xffffff).setIntensity(1);
         this.seekerLight.setRadius(0);
+        this.light3Intensity = 2;
 
         // Interaction/Pickup text for UI
         this.bottlePickupText = this.add.bitmapText(45, 500, 'customFont', "picked up bottle", 28);
@@ -249,7 +260,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(443, 150, false, 2);
         this.newSeeker(374, 440);
         // Spawn Exit
-        var exit = new Wall(this, 500, 35, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 500, 35, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
@@ -280,7 +291,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(315, 215, false, 4);
 
         // Spawn Exit
-        var exit = new Wall(this, 205, 15, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 205, 15, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
@@ -338,7 +349,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(680, 955, true, 4);
 
         // Spawn Exit
-        var exit = new Wall(this, 1030, 108, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 1030, 108, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         // Setup Collision between Exit and Player
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
@@ -400,7 +411,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(705, 915, false, 2, true);
         this.spawnEnemy(672, 450, true, 4);
 
-        var exit = new Wall(this, 1020, 1020, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 1020, 1020, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
             console.log("Level Complete");
@@ -466,7 +477,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(2117, 305, true, 1);
         this.newLeverAndDoor(440, 464, 1273, 374, 4, 4);
         this.newLeverAndDoor(440, 103, 1273, 224, 4, 4);
-        var exit = new Wall(this, 2168, 282, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 2168, 282, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
             console.log("Level Complete");
@@ -500,7 +511,7 @@ class Play extends Phaser.Scene{
         this.spawnEnemy(365, 235, true, 4);
         this.spawnEnemy(445, 615, true, 1);
         this.spawnEnemy(365, 115, true, 4);
-        var exit = new Wall(this, 78, 78, 'footprint', 30,30).setOrigin(0,0);
+        var exit = new Wall(this, 78, 78, 'exit', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
         var collider = this.physics.add.overlap(this.player, exit, (player, exit) => {
             console.log("Level Complete");
@@ -512,10 +523,10 @@ class Play extends Phaser.Scene{
                 this.scene.start('MenuScene');
             })
         });
-        this.newLeverAndDoor(202, 47, 138, 74, 4, 4);
-        this.newLeverAndDoor(43, 338, 75, 224, 2, 2);
-        this.newLeverAndDoor(343, 608, 313, 74, 2, 3);
-        this.newLeverAndDoor(128, 614, 435, 585, 3, 2);
+        this.newLeverAndDoor(43, 338, 313, 74, 2, 3);
+        this.newLeverAndDoor(128, 614, 75, 224, 3, 2);
+        this.newLeverAndDoor(343, 608, 138, 74, 2, 4);
+        this.newLeverAndDoor(202, 47, 435, 585, 4, 2);
     }
 
     // Creates New Bottles at set location (x, y)
@@ -673,10 +684,15 @@ class Play extends Phaser.Scene{
                 }, this);
             })
             if(keyE.isDown && lever.isPlayerUsing() == false) {
+                // Create wave for door opening and sound
+                this.createDoorWave(door.x, door.y);
+
                 // Play lever animation with a delay on the next time you can use the lever 
                 lever.useLever(this.time);
+
                 // Play door animation and set the door state
                 door.openCloseDoor();
+
                 // If the door is closed, add the collider else the door is open - remove the collider
                 if(door.isOpen() == false) {
                     collider.active = true;
@@ -705,9 +721,9 @@ class Play extends Phaser.Scene{
 
     //generates player footsteps
     createFootstep(){
+        this.light1.setPosition(this.player.x, this.player.y);
         this.light1New = true;
         this.light1Radius = 0;
-        this.light1.setPosition(this.player.x, this.player.y);
         this.time.addEvent({
             delay: 900,
             callback: () => {
@@ -720,9 +736,9 @@ class Play extends Phaser.Scene{
 
     // generates bottle sound wave
     createBottleWave(bottle){
+        this.light2.setPosition(bottle.x, bottle.y);
         this.light2New = true;
         this.light2Radius = 0;
-        this.light2.setPosition(bottle.x, bottle.y);
         this.bottleBreakSound.play();
         this.time.addEvent({
             delay: 1200,
@@ -755,6 +771,20 @@ class Play extends Phaser.Scene{
         this.footprintsNew = true;
     }
 
+    // generates door sound waves
+    createDoorWave(x, y){
+        this.light3.setPosition(x, y);
+        this.light3New = true;
+        this.light3Radius = 0;
+        this.doorOpenSound.play();
+        this.time.addEvent({
+            delay: 1000,
+            callback: () => {
+                this.light3New = false;
+            }
+        })
+    }
+
     update() {
         // End game when player gets caught
         if(!this.gameOver && this.playerCaught){
@@ -780,7 +810,7 @@ class Play extends Phaser.Scene{
             if(update.hasThrown() == true) {
                 this.player.thrownBottle();
                 //this.bottlePickupText.setAlpha(0);
-                //this.throwSound.play();
+                this.throwSound.play();
                 // Set a delay for throwing the next bottle
                 for (var j = 0; j < this.bottleGroup.getLength(); j++) {
                     var delayCall = this.bottleGroup.getChildren()[j];
@@ -883,6 +913,26 @@ class Play extends Phaser.Scene{
                 this.light2.setRadius(0);
                 this.light2Intensity = 2;
                 this.light2.setIntensity(2);
+            }
+        }
+
+        // Wave Effect for Door Lights
+        if(this.light3New){
+            this.light3Radius += 1.8;
+            this.light3.setRadius(this.light3Radius);
+            this.light3Intensity = 2;
+            this.light3.setIntensity(this.light3Intensity);
+        } else {
+            if(this.light3Intensity > 0){
+                this.light3Intensity -= 0.05;
+            }
+            this.light3Radius -= 1.8;
+            this.light3.setIntensity(this.light3Intensity);
+            if(this.light3Radius <= 0){
+                this.light3Radius = 0;
+                this.light3.setRadius(0);
+                this.light3Intensity = 2;
+                this.light3.setIntensity(2);
             }
         }
 
