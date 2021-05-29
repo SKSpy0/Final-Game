@@ -130,8 +130,7 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.player, this.wallLayer);
 
         // Enables lights and sets ambient color
-        //this.lights.enable().setAmbientColor(0x000000);
-        this.lights.enable();
+        this.lights.enable().setAmbientColor(0x000000);
 
         // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for enemies
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
@@ -201,7 +200,7 @@ class Play extends Phaser.Scene{
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                    level++;
+                    level = level+3;
                     this.scene.start('LoadScene');
                 })
         });
