@@ -13,6 +13,7 @@ class Play extends Phaser.Scene{
 
         this.load.image('lever', './assets/tempLever.png');
         this.load.image('door', './assets/tempDoor.png');
+        this.load.image('seeker', './assets/tempSeeker.png');
 
         this.load.audio('bottlePickup', './assets/glassBottlePickup.mp3');
         this.load.audio('bottleBreak', './assets/glassBottleBreak.mp3');
@@ -71,6 +72,7 @@ class Play extends Phaser.Scene{
             runChildUpdate: true
         });
         this.doorGroup = this.add.group();
+        this.seekerGroup = this.add.group();
 
         // Add player
         this.player = new Player(this, 430, 510, 'player').setOrigin(0.5).setScale(0.5);
@@ -80,7 +82,8 @@ class Play extends Phaser.Scene{
         switch(level){
             case 1:
                 this.player.setCollideWorldBounds(true);
-
+                this.mapSizeWidth = 540;
+                this.mapSizeHeight = 540;
                 // create each layer in the tilemap
                 this.map = this.add.tilemap('level1');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
@@ -91,7 +94,8 @@ class Play extends Phaser.Scene{
                 break;
             case 2:
                 this.player.setCollideWorldBounds(true);
-
+                this.mapSizeWidth = 540;
+                this.mapSizeHeight = 540;
                 // create each layer in the tilemap
                 this.map = this.add.tilemap('level2');
                 this.tileset = this.map.addTilesetImage('VignetteEscapeTileSet', 'tiles');
@@ -102,7 +106,9 @@ class Play extends Phaser.Scene{
                 break;
             case 3:
                 // setup following camera
-                this.cameras.main.setBounds(0, 0, 1080, 1080);
+                this.mapSizeWidth = 1080;
+                this.mapSizeHeight = 1080;
+                this.cameras.main.setBounds(0, 0, this.mapSizeWidth, this.mapSizeHeight);
                 this.cameras.main.startFollow(this.player);
                 this.cameras.main.setLerp(0.1, 0.1);
 
@@ -119,7 +125,9 @@ class Play extends Phaser.Scene{
                 break;
             case 4:
                 // setup camera
-                this.cameras.main.setBounds(0, 0, 1080, 1080);
+                this.mapSizeWidth = 1080;
+                this.mapSizeHeight = 1080;
+                this.cameras.main.setBounds(0, 0, this.mapSizeWidth, this.mapSizeHeight);
                 this.cameras.main.startFollow(this.player);
                 this.cameras.main.setLerp(0.1, 0.1);
 
@@ -136,7 +144,9 @@ class Play extends Phaser.Scene{
                 break;
             case 5:
                 // setup camera
-                this.cameras.main.setBounds(0, 0, 2220, 600);
+                this.mapSizeWidth = 2220;
+                this.mapSizeHeight = 600;
+                this.cameras.main.setBounds(0, 0, this.mapSizeWidth, this.mapSizeHeight);
                 this.cameras.main.startFollow(this.player);
                 this.cameras.main.setLerp(0.1, 0.1);
 
@@ -152,7 +162,9 @@ class Play extends Phaser.Scene{
                 break;
             case 6:
                 // setup camera
-                this.cameras.main.setBounds(0, 0, 720, 720);
+                this.mapSizeWidth = 720;
+                this.mapSizeHeight = 720;
+                this.cameras.main.setBounds(0, 0, this.mapSizeWidth, this.mapSizeHeight);
                 this.cameras.main.startFollow(this.player);
                 this.cameras.main.setLerp(0.1, 0.1);
 
@@ -192,6 +204,8 @@ class Play extends Phaser.Scene{
         this.light3New = false;
         this.light3Radius = 0;
 
+        this.seekerLight = this.lights.addLight(0, 0, 50).setColor(0xffffff).setIntensity(1);
+        this.seekerLight.setRadius(0);
 
         // Interaction/Pickup text for UI
         this.bottlePickupText = this.add.bitmapText(45, 500, 'customFont', "picked up bottle", 28);
@@ -233,7 +247,7 @@ class Play extends Phaser.Scene{
         this.newBottle(280, 64);
         this.spawnEnemy(485, 150, false, 2);
         this.spawnEnemy(443, 150, false, 2);
-
+        this.newSeeker(374, 440);
         // Spawn Exit
         var exit = new Wall(this, 500, 35, 'footprint', 30,30).setOrigin(0,0);
         exit.setAlpha(1);
@@ -283,6 +297,7 @@ class Play extends Phaser.Scene{
     levelThreeSetup(){
         this.player.x = 105;
         this.player.y = 1025;
+        this.newSeeker(105, 900);
         this.newBottle(160, 915);
         this.newBottle(160, 940);
         this.newBottle(160, 765);
@@ -510,7 +525,7 @@ class Play extends Phaser.Scene{
         bottle.setPipeline('Light2D');
         // Create collision check between player and bottle
         var collider = this.physics.add.overlap(this.player, bottle, (player, bottle) => {
-            if (this.player.hasBottle() == false) {
+            if (this.player.hasBottle() == false && this.player.hasSeeker() == false) {
                 // Bottle pickup text that fades out
                 this.bottlePickupText.x = this.player.x - this.player.width;
                 this.bottlePickupText.y = this.player.y - 40;
@@ -673,6 +688,21 @@ class Play extends Phaser.Scene{
         this.doorGroup.add(door);
     }
 
+    // Seeker on use stops player movement and allows use as a drone that destroys itself after _ seconds
+    newSeeker(seekerX, seekerY) {
+        var seeker = new Seeker(this, seekerX, seekerY, 'seeker').setOrigin(0.5);
+        seeker.setPipeline('Light2D');
+        // Create collision check between player and seeker
+        var collider = this.physics.add.overlap(this.player, seeker, (player, seeker) => {
+            if (this.player.hasBottle() == false && this.player.hasSeeker() == false) {
+                this.player.pickedUpSeeker();
+                seeker.pickedUp();
+                this.physics.world.removeCollider(collider);
+            }
+        });
+        this.seekerGroup.add(seeker);
+    }
+
     //generates player footsteps
     createFootstep(){
         this.light1New = true;
@@ -756,6 +786,10 @@ class Play extends Phaser.Scene{
                     var delayCall = this.bottleGroup.getChildren()[j];
                     delayCall.delay(this.time);
                 }
+                for (var j = 0; j < this.seekerGroup.getLength(); j++) {
+                    var delayCall = this.seekerGroup.getChildren()[j];
+                    delayCall.delay(this.time);
+                }
             }
             // checks if bottle has landed
             if(update.landedCheck()){
@@ -768,6 +802,46 @@ class Play extends Phaser.Scene{
             }
         }
 
+        // Update seekers in seeker group
+        for (var i = 0; i < this.seekerGroup.getLength(); i++) {
+            var update = this.seekerGroup.getChildren()[i];
+            update.update(this.player.x, this.player.y, this.time);
+            // If seeker is active stop player movement, enable seeker movement an camera follow
+            if(update.isActive() == true) {
+                this.player.usedSeeker();
+                this.player.stopPlayer();
+                this.seekerLight.x = update.x;
+                this.seekerLight.y = update.y;
+                this.seekerLight.setRadius(50);
+                this.cameras.main.startFollow(update);
+                this.cameras.main.setBounds(0, 0, this.mapSizeWidth, this.mapSizeHeight);
+                this.cameras.main.setLerp(0.1, 0.1);
+                // Set a delay for using the next seeker
+                for (var j = 0; j < this.seekerGroup.getLength(); j++) {
+                    var delayCall = this.seekerGroup.getChildren()[j];
+                    delayCall.delay(this.time);
+                }
+                for (var j = 0; j < this.bottleGroup.getLength(); j++) {
+                    var delayCall = this.bottleGroup.getChildren()[j];
+                    delayCall.delay(this.time);
+                }
+            }
+            // checks if seeker has been destroyed
+            if(update.destroyedCheck()){
+                console.log('seeker destroyed');
+                this.seekerLight.setRadius(0);
+                update.destroySeeker();
+                // Create a particle explosion and camera shake camera reset on delay
+                this.time.delayedCall(500, () => {
+                    this.cameras.main.startFollow(this.player);
+                    this.cameras.main.setBounds(0, 0, this.mapSizeWidth, this.mapSizeHeight);
+                    this.cameras.main.setLerp(0.1, 0.1);
+                })
+                this.time.delayedCall(500, () => {
+                    this.player.startPlayer();
+                })
+            }
+        }
         // Keep Light0 on player
         this.light0.x = this.player.x;
         this.light0.y = this.player.y;

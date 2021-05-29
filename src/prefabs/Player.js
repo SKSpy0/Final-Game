@@ -14,14 +14,15 @@ class Player extends Phaser.Physics.Arcade.Sprite{
         this.playerVelocity = 150;
 
         this.holdingBottle = false;
+        this.holdingSeeker = false;
 
-        this.playerAlive = true;
+        this.playerMovement = true;
 
     }
 
     update() {
-        // If the player is still alive
-        if(this.playerAlive) {
+        // If the player movement is true
+        if(this.playerMovement) {
             // Player movement
             if(keyA.isDown) {
                 this.body.setVelocityX(-this.playerVelocity);
@@ -76,16 +77,29 @@ class Player extends Phaser.Physics.Arcade.Sprite{
     pickedUpBottle() {
         this.holdingBottle = true;
     }
+    pickedUpSeeker() {
+        this.holdingSeeker = true;
+    }
     // Returns true if player is holding bottle
     hasBottle() {
         return this.holdingBottle;
+    }
+    // Returns true if player is holding seeker
+    hasSeeker() {
+        return this.holdingSeeker;
     }
     // Sets false when player throws bottle
     thrownBottle() {
         this.holdingBottle = false;
     }
+    usedSeeker() {
+        this.holdingSeeker = false;
+    }
     // Stops player movement when hit by enemy
     stopPlayer() {
-        this.playerAlive = false;
+        this.playerMovement = false;
+    }
+    startPlayer() {
+        this.playerMovement = true;
     }
 }
