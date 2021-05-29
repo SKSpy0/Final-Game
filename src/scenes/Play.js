@@ -140,7 +140,7 @@ class Play extends Phaser.Scene{
 
         // Will create a new footstep sound wave 
         this.waveSpawnTimer = this.time.addEvent({
-            delay: 1400,
+            delay: 1800,
             callback: this.createFootstep,
             callbackScope: this,
             loop: true,
@@ -340,12 +340,12 @@ class Play extends Phaser.Scene{
             this.tweens.add ({
                 targets: footprints,
                 alpha: 0,
-                duration: 1400,
+                duration: 1800,
                 repeat: -1,
             });
             // looped event which will update the enemy footprint
             this.time.addEvent({
-                delay: 1400,
+                delay: 1800,
                 callback: this.createEnemyFootstep,
                 args: [footprints, enemy],
                 callbackScope: this,
@@ -411,7 +411,7 @@ class Play extends Phaser.Scene{
         this.light1Radius = 0;
         this.light1.setPosition(this.player.x, this.player.y);
         this.time.addEvent({
-            delay: 700,
+            delay: 900,
             callback: () => {
                 this.light1New = false;
             }
@@ -504,11 +504,13 @@ class Play extends Phaser.Scene{
 
         // Wave effect for Footstep Lights
         if(this.light1New){
-            this.light1Radius += 1.8;
+            this.light1Radius += 1.3;
             this.light1.setRadius(this.light1Radius);
+            this.light1Intensity = 2;
+            this.light1.setIntensity(this.light1Intensity);
         } else {
-            this.light1Intensity -= 0.01;
-            this.light1Radius -= 1.8;
+            this.light1Intensity -= 0.07;
+            this.light1Radius -= 1.3;
             this.light1.setIntensity(this.light1Intensity);
             if(this.light1Radius <= 0){
                 this.light1Radius = 0;
@@ -522,10 +524,13 @@ class Play extends Phaser.Scene{
         if(this.light2New){
             this.light2Radius += 1.8
             this.light2.setRadius(this.light2Radius);
-        } else {
-            this.light2Intensity -= 0.01;
+            this.light2Intensity = 2;
             this.light2.setIntensity(this.light2Intensity);
-            if(this.light2Intensity <= 0){
+        } else {
+            this.light2Intensity -= 0.05;
+            this.light2Radius -= 1.8;
+            this.light2.setIntensity(this.light2Intensity);
+            if(this.light2Radius <= 0){
                 this.light2Radius = 0;
                 this.light2.setRadius(0);
                 this.light2Intensity = 2;
