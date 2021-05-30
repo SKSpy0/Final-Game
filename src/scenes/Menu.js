@@ -8,22 +8,22 @@ class Menu extends Phaser.Scene{
         this.load.bitmapFont('customFont', './assets/CustomFont.png', './assets/CustomFont.fnt');
         // Load Popup
         this.load.image('popup', './assets/tempPopup.png');
+        this.load.image('menubg', './assets/Intro.png');
+        this.load.image('clue', './assets/Clue.png');
+        // Load Music
+        this.load.audio('bgm', './assets/VignetteEscapeLevelMusic.mp3');
     }
 
     // Function for arrows to appear on hover of a menu label (label, left arrow, right arrow)
-    menuInteraction(label, left, right) {
+    menuInteraction(label, marker) {
         label.setInteractive({useHandCursor: true});
         label.on("pointerover", ()=> {
-            left.setVisible(true);
-            right.setVisible(true);
-            left.x = label.x - label.width;
-            left.y = label.y;
-            right.x = label.x + label.width;
-            right.y = label.y;
+            marker.setVisible(true);
+            marker.x = label.x - label.width;
+            marker.y = label.y;
         });
         label.on("pointerout", ()=> {
-            left.setVisible(false);
-            right.setVisible(false);
+            marker.setVisible(false);
         });
     }
 
@@ -84,20 +84,32 @@ class Menu extends Phaser.Scene{
     }
     
     create() {
+        // Set Background Image
+        this.add.image(0, 0, 'menubg').setScale(0.5).setOrigin(0);
+
+
+        this.menubgm = this.sound.add('bgm', {
+            loop:true,
+            volume: 0.5
+        });
+        this.menubgm.play();
+
         // Add Menu text
-        this.title = this.add.bitmapText(centerWidth, centerHeight/2, 'customFont', 'Vignette Escape', 60).setOrigin(0.5);
-        this.start = this.add.bitmapText(centerWidth, centerHeight-25, 'customFont', 'START', 28).setOrigin(0.5);
-        this.settings = this.add.bitmapText(centerWidth, centerHeight+25, 'customFont', 'SETTINGS', 28).setOrigin(0.5);
-        this.controls = this.add.bitmapText(centerWidth, centerHeight+75, 'customFont', 'CONTROLS', 28).setOrigin(0.5);
+        this.title1 = this.add.bitmapText(100, 25, 'customFont', 'Vignette', 60).setOrigin(0.5).setAngle(-12);
+        this.title2 = this.add.bitmapText(135, 65, 'customFont', 'Escape', 56).setOrigin(0.5).setAngle(-12);
+        this.start = this.add.bitmapText(centerWidth+150, centerHeight-25, 'customFont', 'START', 30).setOrigin(0.5);
+        this.settings = this.add.bitmapText(centerWidth+150, centerHeight+25, 'customFont', 'SETTINGS', 30).setOrigin(0.5);
+        this.controls = this.add.bitmapText(centerWidth+150, centerHeight+75, 'customFont', 'CONTROLS', 30).setOrigin(0.5);
 
         // Initialize label markers
+        /*
         this.markerLeft = this.add.bitmapText(0, 0, 'customFont', '>', 28).setOrigin(0.5);
         this.markerRight = this.add.bitmapText(0, 0, 'customFont', '<', 28).setOrigin(0.5);
         this.markerLeft.setVisible(false);
         this.markerRight.setVisible(false);
-
-        // Set Background Color
-        this.cameras.main.setBackgroundColor('rgba(0, 20, 20, 0.5)');
+        */
+       this.marker = this.add.image(0, 0, 'clue').setOrigin(0.5);
+       this.marker.setVisible(false);
 
         // Set keys
         cursors = this.input.keyboard.createCursorKeys();
@@ -107,9 +119,14 @@ class Menu extends Phaser.Scene{
         this.nextScene = false;
 
         // Set cursor hover interaction
+        /*
         this.menuInteraction(this.start, this.markerLeft, this.markerRight);
         this.menuInteraction(this.controls, this.markerLeft, this.markerRight);
         this.menuInteraction(this.settings, this.markerLeft, this.markerRight);
+        */
+        this.menuInteraction(this.start, this.marker);
+        this.menuInteraction(this.controls, this.marker);
+        this.menuInteraction(this.settings, this.marker);
         
         // Set interaction on clicking label
         this.start.on("pointerup", ()=> {
@@ -129,6 +146,7 @@ class Menu extends Phaser.Scene{
             this.cameras.main.fadeOut(1000, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
                 level = 1;
+                this.menubgm.pause();
                 this.scene.start('PlayScene');
             })
             this.clicked = true;
