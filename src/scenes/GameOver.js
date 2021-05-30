@@ -2,11 +2,14 @@ class GameOver extends Phaser.Scene{
     constructor(){
         super("GameOverScene");
     }
-
+    preload() {
+        this.load.image('gameOverbg', './assets/gameOver.png');
+    }
     create() {
+        this.add.image(0, 0, 'gameOverbg').setOrigin(0);
         this.add.bitmapText(centerWidth, centerHeight/2, 'customFont', 'GAME OVER', 60).setOrigin(0.5);
-        this.return = this.add.bitmapText(centerWidth, centerHeight+100, 'customFont', 'Return to main menu', 28).setOrigin(0.5);
-        this.replay = this.add.bitmapText(centerWidth, centerHeight+50, 'customFont', 'Replay Level', 28).setOrigin(0.5);
+        this.return = this.add.bitmapText(centerWidth, centerHeight+100, 'customFont', 'Return to main menu', 36).setOrigin(0.5);
+        this.replay = this.add.bitmapText(centerWidth, centerHeight+50, 'customFont', 'Replay Level', 36).setOrigin(0.5);
         this.return.setInteractive({useHandCursor: true});
         this.replay.setInteractive({useHandCursor: true});
         
