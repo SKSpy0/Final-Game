@@ -97,7 +97,7 @@ class Menu extends Phaser.Scene{
         // Add Menu text
         this.title1 = this.add.bitmapText(100, 35, 'customFont', 'Vignette', 60).setOrigin(0.5).setAngle(-12);
         this.title2 = this.add.bitmapText(135, 75, 'customFont', 'Escape', 56).setOrigin(0.5).setAngle(-12);
-        this.start = this.add.bitmapText(centerWidth+150, centerHeight-25, 'customFont', 'START', 35).setOrigin(0.5);
+        this.start = this.add.bitmapText(centerWidth+150, centerHeight-25, 'customFont', 'START', 36).setOrigin(0.5);
         this.settings = this.add.bitmapText(centerWidth+150, centerHeight+25, 'customFont', 'SETTINGS', 36).setOrigin(0.5);
         this.controls = this.add.bitmapText(centerWidth+150, centerHeight+75, 'customFont', 'CONTROLS', 36).setOrigin(0.5);
 
