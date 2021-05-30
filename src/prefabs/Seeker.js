@@ -62,7 +62,7 @@ class Seeker extends Phaser.Physics.Arcade.Sprite{
         }
         if(this.seekerActive && this.timerStarted == false) {
             this.timerStarted = true;
-            time.delayedCall(4000, () => {
+            time.delayedCall(6000, () => {
                 this.destroyed = true;
                 this.setVelocityX(0);
                 this.setVelocityY(0);
