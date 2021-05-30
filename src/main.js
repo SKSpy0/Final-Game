@@ -4,11 +4,11 @@ let config = {
     height: 540,
     fps: 60,
     maxLights: 25,
-    scene: [Menu, Play, Load, GameOver],
+    scene: [Menu, Play, Load, GameOver, Win],
     physics: {
         default: 'arcade',
         arcade: {
-            debug: false,
+            debug: true,
             tileBias: 30,
         }
     },
