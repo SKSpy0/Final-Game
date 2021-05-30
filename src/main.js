@@ -2,6 +2,7 @@ let config = {
     type: Phaser.AUTO,
     width: 540,
     height: 540,
+    fps: 60,
     maxLights: 25,
     scene: [Menu, Play, Load, GameOver],
     physics: {
