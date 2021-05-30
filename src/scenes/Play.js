@@ -186,25 +186,11 @@ class Play extends Phaser.Scene{
                 break;
         }
 
-        // Tutorial for Level 1
-        if(level == 1){
-            this.tutorialText = this.add.bitmapText(230, 210, 'customFont', 'Welcome', 30);
-            this.time.delayedCall(2000, () => {
-                this.tweens.add({
-                    targets: this.tutorialText,
-                    alpha: 0,
-                    duration: 500,
-                    ease: 'Linear'
-                }, this);
-            })
-            
-        }
-
         // Set Collision between wall and player
         this.physics.add.collider(this.player, this.wallLayer);
 
         // Enables lights and sets ambient color
-        this.lights.enable().setAmbientColor(0x333333);
+        this.lights.enable().setAmbientColor(0x000000);
 
         // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for doors)
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
@@ -252,6 +238,51 @@ class Play extends Phaser.Scene{
             this.physics.add.collider(update, this.doorGroup, (update, doorGroup) => {
                 update.hitWall();
             });
+        }
+
+        // Tutorial for Level 1
+        if(level == 1){
+            this.tutorialOn = true;
+            var popup = this.add.group();
+            var popupBack = this.add.sprite(centerWidth, centerHeight, 'popup').setOrigin(0.5);
+            var text1 = this.add.bitmapText(popupBack.x, popupBack.y-110, 'customFont', 'Welcome Detective', 30).setOrigin(0.5);
+            var text2 = this.add.bitmapText(popupBack.x, popupBack.y-75, 'customFont', 'You can move around with WASD', 25).setOrigin(0.5);
+            var text3 = this.add.bitmapText(popupBack.x, popupBack.y-50, 'customFont', 'Pickup items and use them', 25).setOrigin(0.5);
+            var text4 = this.add.bitmapText(popupBack.x, popupBack.y-25, 'customFont', 'with your mouse and LEFT CLICK', 25).setOrigin(0.5);
+            var text5 = this.add.bitmapText(popupBack.x, popupBack.y, 'customFont', '', 25).setOrigin(0.5);
+            var text6 = this.add.bitmapText(popupBack.x, popupBack.y+25, 'customFont', '', 25).setOrigin(0.5);
+            var text7 = this.add.bitmapText(popupBack.x, popupBack.y+50, 'customFont', 'If there is a door blocking you', 25).setOrigin(0.5);
+            var text8 = this.add.bitmapText(popupBack.x, popupBack.y+75, 'customFont', 'try looking for a lever to open it', 25).setOrigin(0.5);
+            var next = this.add.bitmapText(popupBack.x, popupBack.y+110, 'customFont', 'Next', 30).setOrigin(0.5);
+        
+            popup.add(popupBack);
+            popup.add(text1);
+            popup.add(text2);
+            popup.add(text3);
+            popup.add(text4);
+            popup.add(text5);
+            popup.add(text6);
+            popup.add(text7);
+            popup.add(text8);
+            popup.add(next);
+            next.setInteractive({useHandCursor: true});
+            next.on("pointerup", () => {
+                text2.setText('Be wary of your surroundings');
+                text3.setText('Sentinels patrol these parts');
+                text4.setText('So do not get caught');
+                text5.setText('');
+                text6.setText("You're our department's best");
+                text7.setText("We're counting on you");
+                text8.setText('Good luck');
+                next.destroy(true);
+                var close = this.add.bitmapText(popupBack.x, popupBack.y+110, 'customFont', 'Close', 30).setOrigin(0.5);
+                popup.add(close);
+                close.setInteractive({useHandCursor: true});
+                close.on("pointerup", () => {
+                    this.tutorialOn = false;
+                    popup.destroy(true);
+                })
+            })
         }
     }
 
@@ -795,6 +826,12 @@ class Play extends Phaser.Scene{
     }
 
     update() {
+        // While tutorial is up, restrict player movement
+        if(this.tutorialOn){
+            this.player.x = 450;
+            this.player.y = 510;
+        }
+
         // End game when player gets caught
         if(!this.gameOver && this.playerCaught){
             this.player.stopPlayer();
