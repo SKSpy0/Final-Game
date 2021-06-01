@@ -14,7 +14,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
 
         // Enemy velocity
-        this.enemyVelocity = 100;
+        this.enemyVelocity = 75;
         
         // If Enemy is set to roaming, set velocity for that enemy according to where it's facing
         if(isRoaming){
