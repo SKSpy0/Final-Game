@@ -7,7 +7,7 @@ class Win extends Phaser.Scene{
     }
     create() {
         this.add.image(0, 0, 'win').setOrigin(0);
-        this.add.bitmapText(centerWidth, centerHeight/2, 'customFont', 'YOU WIN', 60).setOrigin(0.5);
+        //this.add.bitmapText(centerWidth, centerHeight/2, 'customFont', 'YOU WIN', 60).setOrigin(0.5);
         this.return = this.add.bitmapText(centerWidth, centerHeight+100, 'customFont', 'Return to main menu', 36).setOrigin(0.5);
         this.replay = this.add.bitmapText(centerWidth, centerHeight+50, 'customFont', 'Restart Game', 36).setOrigin(0.5);
         this.return.setInteractive({useHandCursor: true});
