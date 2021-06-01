@@ -192,7 +192,7 @@ class Play extends Phaser.Scene{
         // Enables lights and sets ambient color
         this.lights.enable().setAmbientColor(0x000000);
 
-        // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for doors)
+        // Create lights (light0 is constant light around player, light1 for player footsteps, light2 for bottle, light3 for doors, seekerlight for seekers)
         this.light0 = this.lights.addLight(this.player.x, this.player.y, 50).setColor(0xffffff).setIntensity(1);
 
         this.light1 = this.lights.addLight(this.player.x, this.player.y, 0).setColor(0xffffff).setIntensity(2);
