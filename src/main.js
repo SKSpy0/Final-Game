@@ -24,3 +24,4 @@ let centerWidth = game.config.width/2;
 //Jesse Park (Art & Sound Designer), Timothy Tai (Programmer), William Lee (Programmer)
 //Completed: 5/30/21
 //All sound effects obtained from https://www.zapsplat.com
+//This build has currently 6 completed levels 

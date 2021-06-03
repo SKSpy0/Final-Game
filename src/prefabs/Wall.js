@@ -1,4 +1,4 @@
-// Wall.js is used to create our boundaries of the level and any walls within the level
+// Wall.js is used to create our exits at each level, it's still called wall bc when we try to change the name Phaser keeps breaking :(
 class Wall extends Phaser.Physics.Arcade.Sprite{
     constructor(scene, x, y, texture, width, height){
         super(scene, x, y, texture);
