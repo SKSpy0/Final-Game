@@ -316,6 +316,7 @@ class Play extends Phaser.Scene{
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                    this.levelBgm.pause();
                     level++;
                     this.scene.start('LoadScene');
                 })
@@ -348,6 +349,7 @@ class Play extends Phaser.Scene{
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                    this.levelBgm.pause();
                     level++;
                     this.scene.start('LoadScene');
                 })
@@ -406,9 +408,9 @@ class Play extends Phaser.Scene{
                 this.physics.world.removeCollider(collider);
                 this.cameras.main.fadeOut(500, 0, 0, 0);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                    this.levelBgm.pause();
                     level++;
                     this.scene.start('LoadScene');
-                    //this.scene.start('MenuScene');
                 })
         });
         this.newLeverAndDoor(270, 515, 278, 465, 4, 4);
@@ -470,6 +472,7 @@ class Play extends Phaser.Scene{
             this.physics.world.removeCollider(collider);
             this.cameras.main.fadeOut(500, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                this.levelBgm.pause();
                 level++;
                 this.scene.start('LoadScene');
             })
@@ -537,6 +540,7 @@ class Play extends Phaser.Scene{
             this.physics.world.removeCollider(collider);
             this.cameras.main.fadeOut(500, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                this.levelBgm.pause();
                 level++;
                 this.scene.start('LoadScene');
             })
@@ -572,6 +576,7 @@ class Play extends Phaser.Scene{
             this.physics.world.removeCollider(collider);
             this.cameras.main.fadeOut(500, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+                this.levelBgm.pause();
                 //level++;
                 //this.scene.start('LoadScene');
                 this.scene.start('WinScene');
@@ -859,6 +864,7 @@ class Play extends Phaser.Scene{
 
         // End game when player gets caught
         if(!this.gameOver && this.playerCaught){
+            this.levelBgm.pause();
             this.player.stopPlayer();
             this.cameras.main.shake(100, 0.0035);
             //console.log("death fade out")
