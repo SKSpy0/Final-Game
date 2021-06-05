@@ -44,7 +44,7 @@ class Play extends Phaser.Scene{
         //assign sounds
         this.levelBgm = this.sound.add('levelbgm', {
             loop: true,
-            volume: 0.1
+            volume: 0.12
         });
         this.levelBgm.play();
         this.bottlePickupSound = this.sound.add('bottlePickup', {
