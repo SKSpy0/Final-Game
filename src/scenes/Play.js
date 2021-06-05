@@ -21,6 +21,7 @@ class Play extends Phaser.Scene{
         this.load.audio('throw', './assets/throw.mp3');
         this.load.audio('footstep', './assets/footStep1.mp3');
         this.load.audio('doorOpen', './assets/doorOpening.mp3');
+        this.load.audio('levelbgm', './assets/ambientSong.mp3');
 
         // loading tilemaps
         this.load.image('tiles', './assets/VignetteEscapeTileSet.png');
@@ -41,6 +42,11 @@ class Play extends Phaser.Scene{
         this.cameras.main.fadeIn(1000, 0, 0, 0);
         
         //assign sounds
+        this.levelBgm = this.sound.add('levelbgm', {
+            loop: true,
+            volume: 0.1
+        });
+        this.levelBgm.play();
         this.bottlePickupSound = this.sound.add('bottlePickup', {
             loop: false,
             volume: 0.5
@@ -875,7 +881,7 @@ class Play extends Phaser.Scene{
             if(update.hasThrown() == true) {
                 this.player.thrownBottle();
                 //this.bottlePickupText.setAlpha(0);
-                this.throwSound.play();
+                //this.throwSound.play();
                 // Set a delay for throwing the next bottle
                 for (var j = 0; j < this.bottleGroup.getLength(); j++) {
                     var delayCall = this.bottleGroup.getChildren()[j];
