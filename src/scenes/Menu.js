@@ -14,7 +14,7 @@ class Menu extends Phaser.Scene{
         this.load.audio('bgm', './assets/VignetteEscapeLevelMusic.mp3');
     }
 
-    // Function for arrows to appear on hover of a menu label (label, left arrow, right arrow)
+    // Function for icon to appear on hover of a menu label (label, icon/marker)
     menuInteraction(label, marker) {
         label.setInteractive({useHandCursor: true});
         label.on("pointerover", ()=> {
@@ -26,7 +26,20 @@ class Menu extends Phaser.Scene{
             marker.setVisible(false);
         });
     }
-
+    // icon appears at the selected level
+    debugSelection(label, markerSettings, levelSelection) {
+        label.setInteractive({useHandCursor: true});
+        label.on("pointerdown", ()=> {
+            level = levelSelection;
+            markerSettings.x = label.x - 50;
+            markerSettings.y = label.y;
+        });
+    }
+    // initialize icon/marker position on debug popup
+    initDebugMarkerPos(label, markerSettings) {
+        markerSettings.x = label.x - 50;
+        markerSettings.y = label.y;
+    }
     openSettings() {
         // Temporarily disables menu buttons
         this.start.setVisible(false);
@@ -44,6 +57,7 @@ class Menu extends Phaser.Scene{
         var text6 = this.add.bitmapText(popupBack.x+75, popupBack.y, 'customFont', "Level 5", 30).setOrigin(0.5);
         var text7 = this.add.bitmapText(popupBack.x+75, popupBack.y+50, 'customFont', "Level 6", 30).setOrigin(0.5);
         var close = this.add.bitmapText(popupBack.x, popupBack.y+100, 'customFont', 'Close', 28).setOrigin(0.5);
+        var markerSettings = this.add.image(0, 0, 'clue').setOrigin(0.5).setScale(0.5);
         popup.add(popupBack);
         popup.add(text1);
         popup.add(text2);
@@ -53,7 +67,16 @@ class Menu extends Phaser.Scene{
         popup.add(text6);
         popup.add(text7);
         popup.add(close);
-
+        popup.add(markerSettings);
+        // The initial position of the marker will be at the selected level
+        this.initDebugMarkerPos(popup.getChildren()[level+1], markerSettings);
+        // initialize pointer events
+        this.debugSelection(text2, markerSettings, 1);
+        this.debugSelection(text3, markerSettings, 2);
+        this.debugSelection(text4, markerSettings, 3);
+        this.debugSelection(text5, markerSettings, 4);
+        this.debugSelection(text6, markerSettings, 5);
+        this.debugSelection(text7, markerSettings, 6);
         // Set Close button interaction
         close.setInteractive({useHandCursor: true});
         close.on("pointerup", ()=> {
@@ -117,12 +140,6 @@ class Menu extends Phaser.Scene{
         this.controls = this.add.bitmapText(centerWidth+150, centerHeight+75, 'customFont', 'CONTROLS', 36).setOrigin(0.5);
 
         // Initialize label markers
-        /*
-        this.markerLeft = this.add.bitmapText(0, 0, 'customFont', '>', 28).setOrigin(0.5);
-        this.markerRight = this.add.bitmapText(0, 0, 'customFont', '<', 28).setOrigin(0.5);
-        this.markerLeft.setVisible(false);
-        this.markerRight.setVisible(false);
-        */
        this.marker = this.add.image(0, 0, 'clue').setOrigin(0.5);
        this.marker.setVisible(false);
 
@@ -134,11 +151,6 @@ class Menu extends Phaser.Scene{
         this.nextScene = false;
 
         // Set cursor hover interaction
-        /*
-        this.menuInteraction(this.start, this.markerLeft, this.markerRight);
-        this.menuInteraction(this.controls, this.markerLeft, this.markerRight);
-        this.menuInteraction(this.settings, this.markerLeft, this.markerRight);
-        */
         this.menuInteraction(this.start, this.marker);
         this.menuInteraction(this.controls, this.marker);
         this.menuInteraction(this.settings, this.marker);
