@@ -22,6 +22,7 @@ let centerWidth = game.config.width/2;
 
 //Vignette Escape create by "Dog Squad"
 //Jesse Park (Art & Sound Designer), Timothy Tai (Programmer), William Lee (Programmer)
-//Completed: 5/30/21
+//Completed: 6/5/21
 //All sound effects obtained from https://www.zapsplat.com
+//Music and Art Assets created by Jesse Park
 //This build has currently 6 completed levels 
