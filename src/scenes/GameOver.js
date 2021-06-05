@@ -4,12 +4,23 @@ class GameOver extends Phaser.Scene{
     }
     preload() {
         this.load.image('gameOverbg', './assets/gameOver.png');
+        
+        this.load.audio('loseSound', './assets/Lose.mp3');
     }
     create() {
+
+        //assign lose sound and play it
+        this.loseSound = this.sound.add('loseSound', {
+            loop: false,
+            volume: 0.5
+        });
+        this.loseSound.play();
+
+        // Create clickable text on Game Over screen
         this.add.image(0, 0, 'gameOverbg').setOrigin(0);
-        this.add.bitmapText(centerWidth, centerHeight/3, 'customFont', 'GAME OVER', 60).setOrigin(0.5);
-        this.return = this.add.bitmapText(centerWidth, centerHeight-20, 'customFont', 'Return to main menu', 36).setOrigin(0.5);
-        this.replay = this.add.bitmapText(centerWidth, centerHeight-70, 'customFont', 'Replay Level', 36).setOrigin(0.5);
+        this.add.bitmapText(centerWidth, centerHeight-150, 'customFont', 'GAME OVER', 60).setOrigin(0.5);
+        this.return = this.add.bitmapText(centerWidth, centerHeight-25, 'customFont', 'Return to main menu', 36).setOrigin(0.5);
+        this.replay = this.add.bitmapText(centerWidth, centerHeight-75, 'customFont', 'Replay Level', 36).setOrigin(0.5);
         this.return.setInteractive({useHandCursor: true});
         this.replay.setInteractive({useHandCursor: true});
         

@@ -4,8 +4,19 @@ class Win extends Phaser.Scene{
     }
     preload() {
         this.load.image('win', './assets/Win.png');
+
+        this.load.audio('winSound', './assets/Win.mp3');
     }
     create() {
+        //assign win sound and play it
+
+        this.winSound = this.sound.add('winSound', {
+            loop: false,
+            volume: 0.5
+        });
+        this.winSound.play();
+
+        // setting up image and text for win screen
         this.add.image(0, 0, 'win').setOrigin(0);
         this.add.bitmapText(centerWidth, centerHeight/3, 'customFont', 'YOU WIN', 60).setOrigin(0.5);
         this.return = this.add.bitmapText(centerWidth, centerHeight-20, 'customFont', 'Return to main menu', 36).setOrigin(0.5);
