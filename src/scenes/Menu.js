@@ -36,10 +36,22 @@ class Menu extends Phaser.Scene{
         // Add popup content
         var popup = this.add.group();
         var popupBack = this.add.sprite(centerWidth, centerHeight, 'popup').setOrigin(0.5);
-        var text1 = this.add.bitmapText(popupBack.x, popupBack.y-100, 'customFont', "Settings", 36).setOrigin(0.5);
+        var text1 = this.add.bitmapText(popupBack.x, popupBack.y-100, 'customFont', "Debug", 36).setOrigin(0.5);
+        var text2 = this.add.bitmapText(popupBack.x-75, popupBack.y-50, 'customFont', "Level 1", 30).setOrigin(0.5);
+        var text3 = this.add.bitmapText(popupBack.x-75, popupBack.y, 'customFont', "Level 2", 30).setOrigin(0.5);
+        var text4 = this.add.bitmapText(popupBack.x-75, popupBack.y+50, 'customFont', "Level 3", 30).setOrigin(0.5);
+        var text5 = this.add.bitmapText(popupBack.x+75, popupBack.y-50, 'customFont', "Level 4", 30).setOrigin(0.5);
+        var text6 = this.add.bitmapText(popupBack.x+75, popupBack.y, 'customFont', "Level 5", 30).setOrigin(0.5);
+        var text7 = this.add.bitmapText(popupBack.x+75, popupBack.y+50, 'customFont', "Level 6", 30).setOrigin(0.5);
         var close = this.add.bitmapText(popupBack.x, popupBack.y+100, 'customFont', 'Close', 28).setOrigin(0.5);
         popup.add(popupBack);
         popup.add(text1);
+        popup.add(text2);
+        popup.add(text3);
+        popup.add(text4);
+        popup.add(text5);
+        popup.add(text6);
+        popup.add(text7);
         popup.add(close);
 
         // Set Close button interaction
@@ -84,6 +96,9 @@ class Menu extends Phaser.Scene{
     }
     
     create() {
+        // setting level
+        level = 1;
+
         // Set Background Image
         this.add.image(0, 0, 'menubg').setScale(0.5).setOrigin(0);
 
@@ -98,7 +113,7 @@ class Menu extends Phaser.Scene{
         this.title1 = this.add.bitmapText(100, 35, 'customFont', 'Vignette', 60).setOrigin(0.5).setAngle(-12);
         this.title2 = this.add.bitmapText(135, 75, 'customFont', 'Escape', 56).setOrigin(0.5).setAngle(-12);
         this.start = this.add.bitmapText(centerWidth+150, centerHeight-25, 'customFont', 'START', 36).setOrigin(0.5);
-        this.settings = this.add.bitmapText(centerWidth+150, centerHeight+25, 'customFont', 'SETTINGS', 36).setOrigin(0.5);
+        this.settings = this.add.bitmapText(centerWidth+150, centerHeight+25, 'customFont', 'DEBUG', 36).setOrigin(0.5);
         this.controls = this.add.bitmapText(centerWidth+150, centerHeight+75, 'customFont', 'CONTROLS', 36).setOrigin(0.5);
 
         // Initialize label markers
@@ -145,7 +160,6 @@ class Menu extends Phaser.Scene{
         if (this.nextScene == true && this.clicked == false) {
             this.cameras.main.fadeOut(1000, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-                level = 1;
                 this.menubgm.pause();
                 this.scene.start('PlayScene');
             })
