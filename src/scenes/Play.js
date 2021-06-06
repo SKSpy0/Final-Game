@@ -22,6 +22,7 @@ class Play extends Phaser.Scene{
         this.load.audio('footstep', './assets/footStep1.mp3');
         this.load.audio('doorOpen', './assets/doorOpening.mp3');
         this.load.audio('levelbgm', './assets/ambientSong.mp3');
+        this.load.audio('alert', './assets/alert.mp3');
 
         // loading tilemaps
         this.load.image('tiles', './assets/VignetteEscapeTileSet.png');
@@ -66,7 +67,11 @@ class Play extends Phaser.Scene{
         this.doorOpenSound = this.sound.add('doorOpen', {
             loop: false,
             volume: 0.3
-        })
+        });
+        this.alertSound = this.sound.add('alert', {
+            loop: false,
+            volume: 0.5
+        });
 
         // Set cursors
         //cursors = this.input.keyboard.createCursorKeys();
@@ -867,9 +872,10 @@ class Play extends Phaser.Scene{
             this.levelBgm.pause();
             this.player.stopPlayer();
             this.cameras.main.shake(100, 0.0035);
+            this.alertSound.play();
             //console.log("death fade out")
             this.gameOver = true;
-            this.cameras.main.fadeOut(500, 0, 0, 0);
+            this.cameras.main.fadeOut(1500, 0, 0, 0);
             this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
                 this.scene.start('GameOverScene');
             })
